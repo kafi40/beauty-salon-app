@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ru.kafi</groupId>
+        <artifactId>beauty-salon-app</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <modules>
+        <module>beauty-salon-api-service</module>
+        <module>beauty-salon-api-gateway</module>
+        <module>beauty-salon-api-common</module>
+        <module>beauty-salon-api-excel-parser</module>
+    </modules>
+
+    <artifactId>beauty-salon-api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>beauty-salon-api</name>
+    <description>beauty-salon-api</description>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+</project>
