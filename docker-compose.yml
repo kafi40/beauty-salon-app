@@ -1,0 +1,39 @@
+services:
+  api-gateway:
+    build: beauty-salon-api/beauty-salon-api-gateway
+    image: api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api-service
+    environment:
+      - API_SERVICE_URL=http://api-service:8181
+
+  api-service:
+    build: beauty-salon-api/beauty-salon-api-service
+    image: api-service
+    container_name: api-service
+    ports:
+      - "8181:8181"
+    depends_on:
+      - beauty-salon-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://beauty-salon-db:5432/app_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+
+  beauty-salon-db:
+    image: postgres:16.1
+    container_name: beauty-salon-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=app_db
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
