@@ -4,64 +4,51 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class KeyboardFactory {
 
     public static InlineKeyboardMarkup getMainMenuKeyBoard() {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        List<InlineKeyboardButton> row = new ArrayList<>();
-        InlineKeyboardButton button;
 
-        button = new InlineKeyboardButton();
-        button.setText("Прайс-лист");
-        button.setCallbackData("price-list");
-        row.add(button);
+        Map<Integer, Map<String, String>> menuMap = new HashMap<>() {
+            {
+                put(1, new HashMap<>() {{
+                    put("Прайс-лист", "price-list");
+                    put("Подписаться", "subscribe");
+                    put("Галерея", "galery");
+                }});
+                put(2, new HashMap<>() {{
+                    put("Записаться", "appointment");
+                    put("Вывести мастеров", "masters");
+                    put("Зарегистрировать аккаунт", "register");
+                }});
+                put(3, new HashMap<>() {{
+                    put("Завершить сеанс", "stop");
+                    put("Контакты\\связаться", "info");
+                }});
+            }
+        };
 
-        button = new InlineKeyboardButton();
-        button.setText("Подписаться");
-        button.setCallbackData("subscribe");
-        row.add(button);
-
-        button = new InlineKeyboardButton();
-        button.setText("Галерея");
-        button.setCallbackData("galery");
-        row.add(button);
-
-        rows.add(row);
-        row = new ArrayList<>();
-
-        button = new InlineKeyboardButton();
-        button.setText("Записаться");
-        button.setCallbackData("appointment");
-        row.add(button);
-
-        button = new InlineKeyboardButton();
-        button.setText("Вывести мастеров");
-        button.setCallbackData("masters");
-        row.add(button);
-
-        button = new InlineKeyboardButton();
-        button.setText("Зарегистрировать аккаунт");
-        button.setCallbackData("register");
-        row.add(button);
-
-        rows.add(row);
-        row = new ArrayList<>();
-
-        button = new InlineKeyboardButton();
-        button.setText("Завершить сеанс");
-        button.setCallbackData("stop");
-        row.add(button);
-
-        button = new InlineKeyboardButton();
-        button.setText("Контакты\\связаться");
-        button.setCallbackData("info");
-        row.add(button);
-
-        rows.add(row);
+        fillRows(rows, menuMap);
 
         return new InlineKeyboardMarkup(rows);
 
+    }
+
+
+    private static void fillRows(List<List<InlineKeyboardButton>> rows, Map<Integer, Map<String, String>> menu) {
+        for (int row : menu.keySet()) {
+            List<InlineKeyboardButton> newRow = new ArrayList<>();
+            for (Map.Entry<String, String> fillData : menu.get(row).entrySet()) {
+                InlineKeyboardButton newButton = new InlineKeyboardButton();
+                newButton.setText(fillData.getKey());
+                newButton.setCallbackData(fillData.getValue());
+                newRow.add(newButton);
+            }
+            rows.add(newRow);
+        }
     }
 }
