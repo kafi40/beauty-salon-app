@@ -1,8 +1,6 @@
 package ru.kafi.beautysalonbothandler.handler;
 
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -12,7 +10,6 @@ import ru.kafi.beautysalonbothandler.util.UserState;
 
 @Controller
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ResponseHandler {
 
     public BotApiMethod<?> handle(StateDto data) {
@@ -20,7 +17,7 @@ public class ResponseHandler {
         String text = data.getMessageText();
 
 
-        switch(data.getState()) {
+        switch (data.getState()) {
             case MAIN_MENU -> {
                 return replyToMainMenu(data);
             }
