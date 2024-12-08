@@ -1,45 +1,41 @@
 package ru.kafi.beautysalonbothandler.bot;
 
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
-import org.telegram.abilitybots.api.bot.AbilityBot;
-import org.telegram.abilitybots.api.bot.BaseAbilityBot;
-import org.telegram.abilitybots.api.objects.*;
-import org.telegram.abilitybots.api.util.AbilityUtils;
+import lombok.Getter;
+import lombok.Setter;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kafi.beautysalonbothandler.handler.ResponseHandler;
-import ru.kafi.beautysalonbothandler.util.Constants;
+import org.telegram.telegrambots.starter.SpringWebhookBot;
+import ru.kafi.beautysalonbothandler.facade.TelegramFacade;
 
-import java.util.function.BiConsumer;
+@Getter
+@Setter
+public class BeautySalonBot extends SpringWebhookBot {
 
-@Component
-public class BeautySalonBot extends AbilityBot {
-    private final ResponseHandler responseHandler;
+    private String botPath;
+    private String botUserName;
+    private String botToken;
+    private TelegramFacade telegramFacade;
 
-    public BeautySalonBot(Environment env) {
-        super(env.getProperty("bot.token"), "BeautySalonAppTestBot");
-        this.responseHandler = new ResponseHandler(silent, db);
+
+    public BeautySalonBot(SetWebhook setWebhook, String token, TelegramFacade telegramFacade) {
+        super(setWebhook, token);
+        this.telegramFacade = telegramFacade;
     }
 
-    public Ability start() {
-        return Ability.builder()
-                .name("start")
-                .info(Constants.START_DESCRIPTION)
-                .locality(Locality.USER)
-                .privacy(Privacy.PUBLIC)
-                .action(messageContext -> responseHandler.replyToStart(messageContext.chatId()))
-                .build();
+
+    @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        return telegramFacade.handleUpdate(update);
     }
 
     @Override
-    public long creatorId() {
-        return 1L;
+    public String getBotPath() {
+        return this.botPath;
     }
 
-    public Reply replyToButtons() {
-        BiConsumer<BaseAbilityBot, Update> action = (baseAbilityBot, update) ->
-                responseHandler.replyToButtons(AbilityUtils.getChatId(update), update.getMessage());
-        return Reply.of(action, Flag.TEXT, update -> responseHandler.userIsActive(AbilityUtils.getChatId(update)));
-
+    @Override
+    public String getBotUsername() {
+        return this.botUserName;
     }
 }
