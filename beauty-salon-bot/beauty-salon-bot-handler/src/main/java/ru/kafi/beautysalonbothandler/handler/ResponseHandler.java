@@ -24,7 +24,7 @@ public class ResponseHandler {
             case MAIN_MENU -> {
                 return replyToMainMenu(data);
             }
-            default -> {
+            case null, default -> {
                 return null;
             }
         }
@@ -33,6 +33,7 @@ public class ResponseHandler {
     private BotApiMethod<?> replyToMainMenu(StateDto data) {
         SendMessage message = new SendMessage();
         message.setChatId(data.getChatId());
+        message.setText("Добро пожаловать в мини-приложение нашего салона красоты");
         message.setReplyMarkup(KeyboardFactory.getMainMenuKeyBoard());
         data.setState(UserState.MAIN_MENU);
         return message;

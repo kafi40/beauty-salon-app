@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kafi.beautysalonbothandler.dto.StateDto;
 import ru.kafi.beautysalonbothandler.handler.ResponseHandler;
+import ru.kafi.beautysalonbothandler.util.UserState;
 
 @Component
 @Slf4j
@@ -36,7 +37,7 @@ public class TelegramFacade {
     public BotApiMethod<?> withMessage(Message message) {
         StateDto state = new StateDto(message.getChatId());
         state.setMessageText(message.getText());
-
+        state.setState(UserState.MAIN_MENU);
 
         return responseHandler.handle(state);
     }
