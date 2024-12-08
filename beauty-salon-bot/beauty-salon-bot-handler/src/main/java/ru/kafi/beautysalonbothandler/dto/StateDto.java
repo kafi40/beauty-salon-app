@@ -16,7 +16,4 @@ public class StateDto {
     String callback;
     UserState state;
 
-    public StateDto(Long chatId) {
-        this.chatId = chatId;
-    }
 }

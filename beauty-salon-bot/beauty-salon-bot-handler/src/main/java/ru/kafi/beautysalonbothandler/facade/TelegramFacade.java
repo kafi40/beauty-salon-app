@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kafi.beautysalonbothandler.dto.StateDto;
+import ru.kafi.beautysalonbothandler.handler.CallbackQueryHandler;
 import ru.kafi.beautysalonbothandler.handler.ResponseHandler;
 import ru.kafi.beautysalonbothandler.util.UserState;
 
@@ -17,10 +18,12 @@ import ru.kafi.beautysalonbothandler.util.UserState;
 public class TelegramFacade {
 
     private final ResponseHandler responseHandler;
+    private final CallbackQueryHandler callbackQueryHandler;
 
     public BotApiMethod<?> handleUpdate(Update update) {
-        System.out.println("testHandle");
         if (update.hasCallbackQuery()) {
+            log.info("new callback query from user - {}, with data - {}", update.getCallbackQuery().getFrom().getUserName(),
+                    update.getCallbackQuery().getData());
             return withCallbackQuery(update.getCallbackQuery());
         } else {
             Message message = update.getMessage();
@@ -35,7 +38,9 @@ public class TelegramFacade {
     }
 
     public BotApiMethod<?> withMessage(Message message) {
-        StateDto state = new StateDto(message.getChatId());
+
+        StateDto state = new StateDto();
+        state.setChatId(message.getChatId());
         state.setMessageText(message.getText());
         state.setState(UserState.MAIN_MENU);
 
@@ -44,7 +49,8 @@ public class TelegramFacade {
 
     public BotApiMethod<?> withCallbackQuery(CallbackQuery callbackQuery) {
         long chatId = callbackQuery.getMessage().getChatId();
+        StateDto stateDto = new StateDto();
 
-        return null;
+        return callbackQueryHandler.processCallbackQuery(stateDto);
     }
 }
