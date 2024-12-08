@@ -50,6 +50,7 @@ public class TelegramFacade {
     public BotApiMethod<?> withCallbackQuery(CallbackQuery callbackQuery) {
         long chatId = callbackQuery.getMessage().getChatId();
         StateDto stateDto = new StateDto();
+        stateDto.setChatId(chatId);
 
         return callbackQueryHandler.processCallbackQuery(stateDto);
     }
