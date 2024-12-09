@@ -23,3 +23,6 @@ target/
 **/mvnw.cmd
 **/mvnw
 **/.mvn/
+
+### Temp BD files###
+BeautySalonAppTestBot
