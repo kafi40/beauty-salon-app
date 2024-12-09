@@ -2,6 +2,7 @@ package ru.kafi.beautysalonapiservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.kafi.beautysalonapicommon.dto.user.*;
@@ -24,7 +25,7 @@ public class UserController {
 
     @GetMapping("/admin/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<InfoUserDto> getAll(
+    public Page<InfoUserDto> getAll(
             @RequestParam(required = false) List<Long> positionIds,
             @RequestParam(required = false, defaultValue = "0") int from,
             @RequestParam(required = false, defaultValue = "10") int size

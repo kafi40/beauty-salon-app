@@ -1,5 +1,6 @@
 package ru.kafi.beautysalonapiservice.service;
 
+import org.springframework.data.domain.Page;
 import ru.kafi.beautysalonapicommon.dto.user.*;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public interface UserService {
     FullInfoUserDto get(Long userId);
 
-    List<InfoUserDto> getAll(List<Long> positionIds, int from, int size);
+    Page<InfoUserDto> getAll(List<Long> positionIds, int from, int size);
 
     InfoClientDto create(NewUserDto newUser);
 

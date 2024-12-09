@@ -3,6 +3,7 @@ package ru.kafi.beautysalonapiservice.service.impl;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.kafi.beautysalonapicommon.dto.user.*;
@@ -34,18 +35,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<InfoUserDto> getAll(List<Long> positionIds, int from, int size) {
+    public Page<InfoUserDto> getAll(List<Long> positionIds, int from, int size) {
         log.info("API service (UserService): Try getAll() by IDs={}", positionIds);
         PageRequest page = PageRequest.of(from, size);
         BooleanBuilder query = new BooleanBuilder();
         QUser qUser = QUser.user;
         if (positionIds != null)
             query.and(qUser.position.id.in(positionIds));
-        List<User> users = userRepository.findAll(query, page).getContent();
+        Page<User> users = userRepository.findAll(query, page);
         log.info("API service (UserService): Finish getAll(). Users={}", users);
-        return users.stream()
-                .map(userMapper::toDto)
-                .toList();
+        return users.map(userMapper::toDto);
     }
 
     @Override
