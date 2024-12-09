@@ -27,38 +27,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public FullInfoUserDto get(Long userId) {
-        log.info("API service (UserService): Try get() by ID={}", userId);
+        log.info("API service (UserService): Try get()");
         User user =  userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("API service (UserController): User with ID=" + userId + " not found"));
-        log.info("API service (UserService): Finish get(). User={}", user);
+        log.info("API service (UserService): Finish get()");
         return userMapper.toFullDto(user);
     }
 
     @Override
-    public Page<InfoUserDto> getAll(List<Long> positionIds, int from, int size) {
-        log.info("API service (UserService): Try getAll() by IDs={}", positionIds);
-        PageRequest page = PageRequest.of(from, size);
+    public Page<InfoUserDto> getAll(List<Long> positionIds, PageRequest page) {
+        log.info("API service (UserService): Try getAll()");
         BooleanBuilder query = new BooleanBuilder();
         QUser qUser = QUser.user;
         if (positionIds != null)
             query.and(qUser.position.id.in(positionIds));
         Page<User> users = userRepository.findAll(query, page);
-        log.info("API service (UserService): Finish getAll(). Users={}", users);
+        log.info("API service (UserService): Finish getAll().");
         return users.map(userMapper::toDto);
     }
 
     @Override
     public InfoClientDto create(NewUserDto newUser) {
-        log.info("API service (UserService): Try create() new user={}", newUser);
+        log.info("API service (UserService): Try create()");
         User user = userMapper.toEntity(newUser);
         user = userRepository.save(user);
-        log.info("API service (UserService): Finish create(). User={}", user);
+        log.info("API service (UserService): Finish create()");
         return userMapper.toClientDto(user);
     }
 
     @Override
     public InfoClientDto update(Long userId, UpdateUserDto updateUser) {
-        log.info("API service (UserService): Try modify() new user={}", updateUser);
+        log.info("API service (UserService): Try modify()");
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("API service (UserController): User with ID=" + userId + " not found"));
         if (updateUser.getFirstName() != null)
@@ -74,13 +73,13 @@ public class UserServiceImpl implements UserService {
         if (updateUser.getBirthday() != null)
             user.setBirthday(toDate(updateUser.getBirthday()));
         user = userRepository.save(user);
-        log.info("API service (UserService): Finish modify(). User={}", user);
+        log.info("API service (UserService): Finish modify()");
         return userMapper.toClientDto(user);
     }
 
     @Override
     public void delete(Long userId) {
-        log.info("API service (UserService): Try delete() by ID={}", userId);
+        log.info("API service (UserService): Try delete()");
         userRepository.deleteById(userId);
         log.info("API service (UserService): Finish delete()");
     }

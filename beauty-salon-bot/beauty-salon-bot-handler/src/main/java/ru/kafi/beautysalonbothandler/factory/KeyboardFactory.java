@@ -13,24 +13,25 @@ public class KeyboardFactory {
     public static InlineKeyboardMarkup getMainMenuKeyBoard() {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
-        Map<Integer, Map<String, String>> menuMap = new HashMap<>() {
-            {
+        Map<Integer, Map<String, String>> menuMap = new HashMap<>() {{
                 put(1, new HashMap<>() {{
-                    put("Прайс-лист", "price-list");
-                    put("Подписаться", "subscribe");
-                    put("Галерея", "galery");
-                }});
+                        put("Прайс-лист", "price-list");
+                        put("Подписаться", "subscribe");
+                        put("Галерея", "galery");
+                }
+                });
                 put(2, new HashMap<>() {{
                     put("Записаться", "appointment");
                     put("Вывести мастеров", "masters");
                     put("Зарегистрировать аккаунт", "register");
-                }});
+                }
+                });
                 put(3, new HashMap<>() {{
                     put("Завершить сеанс", "stop");
                     put("Контакты\\связаться", "info");
-                }});
-            }
-        };
+                }
+                });
+            }};
 
         fillRows(rows, menuMap);
 

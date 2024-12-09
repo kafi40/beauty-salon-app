@@ -3,6 +3,7 @@ package ru.kafi.beautysalonapiservice.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.kafi.beautysalonapicommon.dto.user.*;
@@ -27,11 +28,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public Page<InfoUserDto> getAll(
             @RequestParam(required = false) List<Long> positionIds,
-            @RequestParam(required = false, defaultValue = "0") int from,
-            @RequestParam(required = false, defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") int from,
+            @RequestParam(defaultValue = "10") int size
             ) {
         log.info("API service (UserController): Get user with param from={}, size={}", from, size);
-        return userService.getAll(positionIds, from, size);
+        return userService.getAll(positionIds, PageRequest.of(from, size));
     }
 
     @PostMapping("/users")

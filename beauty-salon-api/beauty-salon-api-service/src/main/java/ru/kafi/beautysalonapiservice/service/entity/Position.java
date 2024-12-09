@@ -1,11 +1,13 @@
 package ru.kafi.beautysalonapiservice.service.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "positions")
-@Data
+@Getter
+@Setter
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
