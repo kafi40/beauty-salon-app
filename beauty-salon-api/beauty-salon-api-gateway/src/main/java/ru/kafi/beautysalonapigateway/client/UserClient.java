@@ -9,7 +9,7 @@ import ru.kafi.beautysalonapicommon.dto.user.UpdateUserDto;
 public interface UserClient {
     ResponseEntity<?> get(HttpServletRequest request);
 
-    Page<?> getAll(HttpServletRequest request);
+    Page<?> getPage(HttpServletRequest request);
 
     ResponseEntity<?> create(HttpServletRequest request, NewUserDto newUser);
 

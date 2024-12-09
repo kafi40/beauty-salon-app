@@ -3,6 +3,7 @@ package ru.kafi.beautysalonapiservice.service.impl;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,11 @@ public class UserServiceImpl implements UserService {
     public InfoClientDto create(NewUserDto newUser) {
         log.info("API service (UserService): Try create()");
         User user = userMapper.toEntity(newUser);
-        user = userRepository.save(user);
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            System.out.println(e.getMessage());
+        }
         log.info("API service (UserService): Finish create()");
         return userMapper.toClientDto(user);
     }
@@ -72,7 +77,11 @@ public class UserServiceImpl implements UserService {
             user.setGender(updateUser.getGender());
         if (updateUser.getBirthday() != null)
             user.setBirthday(toDate(updateUser.getBirthday()));
-        user = userRepository.save(user);
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            System.out.println(e.getMessage());
+        }
         log.info("API service (UserService): Finish modify()");
         return userMapper.toClientDto(user);
     }

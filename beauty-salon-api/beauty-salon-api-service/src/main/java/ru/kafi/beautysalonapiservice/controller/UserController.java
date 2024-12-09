@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public InfoClientDto create(@RequestBody NewUserDto newUser) {
-        log.info("API service (UserController): Create user {}", newUser);
+        log.info("API service (UserController): Create user={}", newUser);
         return userService.create(newUser);
     }
 

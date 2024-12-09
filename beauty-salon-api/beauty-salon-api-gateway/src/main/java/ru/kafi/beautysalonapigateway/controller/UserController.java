@@ -17,20 +17,20 @@ import ru.kafi.beautysalonapigateway.client.UserClient;
 
 import java.util.List;
 
-@RestController
+@RestController()
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
     private final UserClient userClient;
 
-    @GetMapping("api/admin/users/{userId}")
+    @GetMapping("/api/admin/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> get(@Positive @PathVariable Long userId, HttpServletRequest request) {
         log.info("API gateway (UserController): Get user with param ids={}", userId);
         return userClient.get(request);
     }
 
-    @GetMapping("api/admin/users")
+    @GetMapping("/api/admin/users")
     @ResponseStatus(HttpStatus.OK)
     public Page<?> getAll(
             @PositiveList @RequestParam(required = false) List<Long> positionIds,
@@ -39,17 +39,17 @@ public class UserController {
             HttpServletRequest request
     ) {
         log.info("API gateway (UserController): Get user with param from={}, size={}", from, size);
-        return userClient.getAll(request);
+        return userClient.getPage(request);
     }
 
-    @PostMapping("api/users")
+    @PostMapping("/api/users")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> create(@Valid @RequestBody NewUserDto newUser, HttpServletRequest request) {
         log.info("API gateway (UserController): Create user {}", newUser);
         return userClient.create(request, newUser);
     }
 
-    @PatchMapping("api/users/{userId}")
+    @PatchMapping("/api/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> patch(
             @Positive @PathVariable Long userId,
@@ -59,7 +59,7 @@ public class UserController {
         return userClient.update(request, updateUser);
     }
 
-    @DeleteMapping("api/users/{userId}")
+    @DeleteMapping("/api/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> delete(@Positive @PathVariable Long userId,
                        HttpServletRequest request) {

@@ -17,26 +17,26 @@ public class UserClientImpl extends Client implements UserClient {
 
     @Override
     public ResponseEntity<?> get(HttpServletRequest request) {
-        return super.get(request.getRequestURI().substring(4));
+        return super.get(request.getRequestURI());
     }
 
     @Override
-    public Page<?> getAll(HttpServletRequest request) {
-        return super.getAll(request.getRequestURI().substring(4), request);
+    public Page<?> getPage(HttpServletRequest request) {
+        return super.getPage(request.getRequestURI(), request);
     }
 
     @Override
     public ResponseEntity<?> create(HttpServletRequest request, NewUserDto newUser) {
-        return super.post(request.getRequestURI().substring(4), newUser);
+        return super.post(request.getRequestURI(), newUser);
     }
 
     @Override
     public ResponseEntity<?> update(HttpServletRequest request, UpdateUserDto updateUser) {
-        return super.patch(request.getRequestURI().substring(4), updateUser);
+        return super.patch(request.getRequestURI(), updateUser);
     }
 
     @Override
     public ResponseEntity<?> delete(HttpServletRequest request) {
-        return super.delete(request.getRequestURI().substring(4));
+        return super.delete(request.getRequestURI());
     }
 }

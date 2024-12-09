@@ -36,8 +36,7 @@ public class User {
     @JoinColumn(name = "position_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Position position;
-//    @JoinColumn(name = "avatar_id")
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Image avatar;
-
+    @JoinColumn(name = "avatar_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Image avatar;
 }
