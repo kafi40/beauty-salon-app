@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,19 +32,13 @@ public class UserController {
 
     @GetMapping("api/admin/users")
     @ResponseStatus(HttpStatus.OK)
-    public List<ResponseEntity<?>> getAll(
+    public Page<?> getAll(
             @PositiveList @RequestParam(required = false) List<Long> positionIds,
             @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
             @Positive @RequestParam(required = false, defaultValue = "10") Integer size,
             HttpServletRequest request
     ) {
         log.info("API gateway (UserController): Get user with param from={}, size={}", from, size);
-        if (!request.getParameterMap().containsKey("from"))
-            request.getParameterMap().put("from", new String[]{String.valueOf(from)});
-
-        if (!request.getParameterMap().containsKey("size"))
-            request.getParameterMap().put("size", new String[]{String.valueOf(size)});
-
         return userClient.getAll(request);
     }
 
@@ -66,9 +61,9 @@ public class UserController {
 
     @DeleteMapping("api/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Positive @PathVariable Long userId,
+    public ResponseEntity<?> delete(@Positive @PathVariable Long userId,
                        HttpServletRequest request) {
         log.info("API gateway (UserController): Delete by ID={}", userId);
-        userClient.delete(request);
+        return userClient.delete(request);
     }
 }

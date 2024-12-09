@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.kafi.beautysalonapigateway.client.RestResponsePage;
 
 import java.net.URI;
 import java.util.Collections;
-import java.util.List;
 
 @Slf4j
 public abstract class Client {
@@ -45,7 +46,7 @@ public abstract class Client {
         }
     }
 
-    protected List<ResponseEntity<?>> getAll(String path, HttpServletRequest request) {
+    protected Page<?> getAll(String path, HttpServletRequest request) {
         log.info("API gateway (Client): Try getAll by path={}", path);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         for (String key : request.getParameterMap().keySet()) {
@@ -53,20 +54,22 @@ public abstract class Client {
                 params.add(key, value);
             }
         }
-        URI uri  = UriComponentsBuilder
+        URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(path)
                 .queryParams(params)
                 .build()
                 .toUri();
         try {
-            return restClient.get()
+            ParameterizedTypeReference<RestResponsePage<?>> responseType = new ParameterizedTypeReference<>() {};
+            ResponseEntity<RestResponsePage<?>> responseEntity = restClient.get()
                     .uri(uri)
-                    .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
+                    .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
-                    .body(new ParameterizedTypeReference<>(){});
+                    .toEntity(responseType);
+            return responseEntity.getBody();
         } catch (Exception e) {
-            return Collections.singletonList(error(e));
+            return new RestResponsePage<>(Collections.emptyList());
         }
     }
 
@@ -131,7 +134,10 @@ public abstract class Client {
 
     private ResponseEntity<?> error(Exception e) {
         log.error("API gateway (Client): Failed to access the server: {}", e.getMessage());
-        String status = e.getMessage().substring(0, 3);
+        String findStr = "\"status\":";
+        int fIndex = e.getMessage().indexOf(findStr) + findStr.length();
+        int lIndex = fIndex + 3;
+        String status = e.getMessage().substring(fIndex, lIndex);
         return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(Integer.parseInt(status)));
     }
 }

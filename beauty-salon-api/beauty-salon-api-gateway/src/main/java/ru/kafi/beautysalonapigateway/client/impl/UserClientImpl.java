@@ -1,14 +1,13 @@
 package ru.kafi.beautysalonapigateway.client.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
 import ru.kafi.beautysalonapicommon.dto.user.UpdateUserDto;
 import ru.kafi.beautysalonapigateway.client.UserClient;
-
-import java.util.List;
 
 @Service
 public class UserClientImpl extends Client implements UserClient {
@@ -22,7 +21,7 @@ public class UserClientImpl extends Client implements UserClient {
     }
 
     @Override
-    public List<ResponseEntity<?>> getAll(HttpServletRequest request) {
+    public Page<?> getAll(HttpServletRequest request) {
         return super.getAll(request.getRequestURI().substring(4), request);
     }
 
@@ -37,7 +36,7 @@ public class UserClientImpl extends Client implements UserClient {
     }
 
     @Override
-    public void delete(HttpServletRequest request) {
-        super.delete(request.getRequestURI().substring(4));
+    public ResponseEntity<?> delete(HttpServletRequest request) {
+        return super.delete(request.getRequestURI().substring(4));
     }
 }
