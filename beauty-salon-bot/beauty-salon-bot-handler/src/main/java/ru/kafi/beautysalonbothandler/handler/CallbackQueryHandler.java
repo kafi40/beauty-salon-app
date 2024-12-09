@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import ru.kafi.beautysalonbothandler.dto.StateDto;
+import ru.kafi.beautysalonbotcommon.dto.StateDto;
 
 @RequiredArgsConstructor
 @Component

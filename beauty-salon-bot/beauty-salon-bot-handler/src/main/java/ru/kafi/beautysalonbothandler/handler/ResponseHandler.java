@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.kafi.beautysalonbothandler.dto.StateDto;
+import ru.kafi.beautysalonbotcommon.dto.StateDto;
+import ru.kafi.beautysalonbotcommon.util.UserState;
 import ru.kafi.beautysalonbothandler.factory.KeyboardFactory;
-import ru.kafi.beautysalonbothandler.util.UserState;
+
 
 @Controller
 @RequiredArgsConstructor

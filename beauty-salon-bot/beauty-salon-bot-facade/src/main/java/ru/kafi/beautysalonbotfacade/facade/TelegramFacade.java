@@ -1,4 +1,4 @@
-package ru.kafi.beautysalonbothandler.facade;
+package ru.kafi.beautysalonbotfacade.facade;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,10 +7,10 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kafi.beautysalonbothandler.dto.StateDto;
+import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbothandler.handler.CallbackQueryHandler;
 import ru.kafi.beautysalonbothandler.handler.ResponseHandler;
-import ru.kafi.beautysalonbothandler.util.UserState;
+import ru.kafi.beautysalonbotcommon.util.UserState;
 
 @Component
 @Slf4j

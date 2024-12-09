@@ -1,4 +1,4 @@
-package ru.kafi.beautysalonbothandler.util;
+package ru.kafi.beautysalonbotcommon.util;
 
 public enum UserState {
     AWAITING_CONFIRMATION,

@@ -1,4 +1,4 @@
-package ru.kafi.beautysalonbothandler.util;
+package ru.kafi.beautysalonbotcommon.util;
 
 public class Constants {
     public static final String START_DESCRIPTION = "Запускает бота";

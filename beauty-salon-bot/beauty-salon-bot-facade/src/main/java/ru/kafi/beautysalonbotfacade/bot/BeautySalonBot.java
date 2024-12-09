@@ -1,4 +1,4 @@
-package ru.kafi.beautysalonbothandler.bot;
+package ru.kafi.beautysalonbotfacade.bot;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
-import ru.kafi.beautysalonbothandler.facade.TelegramFacade;
+import ru.kafi.beautysalonbotfacade.facade.TelegramFacade;
 
 @Getter
 @Setter

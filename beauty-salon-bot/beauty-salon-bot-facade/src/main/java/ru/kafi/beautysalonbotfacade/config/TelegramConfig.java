@@ -1,4 +1,4 @@
-package ru.kafi.beautysalonbothandler.config;
+package ru.kafi.beautysalonbotfacade.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

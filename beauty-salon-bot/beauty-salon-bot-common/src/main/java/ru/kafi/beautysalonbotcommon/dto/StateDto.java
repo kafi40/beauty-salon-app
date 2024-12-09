@@ -1,7 +1,7 @@
-package ru.kafi.beautysalonbothandler.dto;
+package ru.kafi.beautysalonbotcommon.dto;
 
+import ru.kafi.beautysalonbotcommon.util.UserState;
 import lombok.*;
-import ru.kafi.beautysalonbothandler.util.UserState;
 
 @Data
 @ToString
