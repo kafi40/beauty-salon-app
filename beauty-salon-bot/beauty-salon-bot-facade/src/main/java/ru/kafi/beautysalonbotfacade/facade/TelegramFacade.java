@@ -39,8 +39,8 @@ public class TelegramFacade {
 
     public BotApiMethod<?> withMessage(Message message) {
 
-        StateDto state = StateDto.builder().
-                chatId(message.getChatId())
+        StateDto state = StateDto.builder()
+                .chatId(message.getChatId())
                 .messageText(message.getText())
                 .state(UserState.MAIN_MENU)
                 .build();
