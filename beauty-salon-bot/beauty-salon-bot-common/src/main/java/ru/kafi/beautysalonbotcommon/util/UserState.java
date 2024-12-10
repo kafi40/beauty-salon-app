@@ -11,5 +11,6 @@ public enum UserState {
     MAIN_MENU,
     REGISTER,
     INFO,
-    AWAITING_EMAIL
+    AWAITING_EMAIL,
+    PERSONAL_ACCOUNT
 }
