@@ -8,11 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.kafi.beautysalonapicommon.dto.user.*;
+import ru.kafi.beautysalonapicommon.dto.user.client.InfoClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.EmployeeDto;
 import ru.kafi.beautysalonapiservice.exception.NotFoundException;
+import ru.kafi.beautysalonapiservice.repository.PositionRepository;
 import ru.kafi.beautysalonapiservice.repository.UserRepository;
 import ru.kafi.beautysalonapiservice.service.UserService;
+import ru.kafi.beautysalonapiservice.service.entity.Position;
 import ru.kafi.beautysalonapiservice.service.entity.QUser;
 import ru.kafi.beautysalonapiservice.service.entity.User;
+import ru.kafi.beautysalonapiservice.service.mapper.PositionMapper;
 import ru.kafi.beautysalonapiservice.service.mapper.UserMapper;
 
 import java.sql.Date;
@@ -24,7 +29,9 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PositionRepository positionRepository;
     private final UserMapper userMapper;
+    private final PositionMapper positionMapper;
 
     @Override
     public FullInfoUserDto get(Long userId) {
@@ -58,6 +65,23 @@ public class UserServiceImpl implements UserService {
         }
         log.info("API service (UserService): Finish create()");
         return userMapper.toClientDto(user);
+    }
+
+    @Override
+    public EmployeeDto createEmployee(EmployeeDto newEmployee) {
+        log.info("API service (UserService): Try createEmployee()");
+        User user = userMapper.toEntity(newEmployee);
+        Position position = positionRepository.findById(newEmployee.getPositionId())
+                .orElseThrow(() -> new NotFoundException(
+                        "API service (UserController): Position with ID=" + newEmployee.getPositionId() + " not found"));
+        user.setPosition(position);
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            System.out.println(e.getMessage());
+        }
+        log.info("API service (UserService): Finish createEmployee()");
+        return null;
     }
 
     @Override
