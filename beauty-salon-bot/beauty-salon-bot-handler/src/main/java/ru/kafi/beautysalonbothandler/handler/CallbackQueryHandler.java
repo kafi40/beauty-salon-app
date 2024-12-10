@@ -13,6 +13,7 @@ import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbotcommon.util.Constants;
 import ru.kafi.beautysalonbotcommon.util.UserState;
+import ru.kafi.beautysalonbothandler.factory.KeyboardFactory;
 
 @RequiredArgsConstructor
 @Component
@@ -29,6 +30,12 @@ public class CallbackQueryHandler {
             }
             case "info" -> {
                 return processInfo(state);
+            }
+            case "personal-account" -> {
+                return processPersonalAccount(state);
+            }
+            case "main-menu" -> {
+                return processMainMenu(state);
             }
         }
 
@@ -66,6 +73,22 @@ public class CallbackQueryHandler {
         message.setChatId(state.getChatId());
         message.setText("Пожалуйста введите свой email");
 
+        return message;
+    }
+    public BotApiMethod<?> processPersonalAccount(StateDto stateDto) {
+        SendMessage message = new SendMessage();
+        message.setChatId(stateDto.getChatId());
+        message.setText("Личный кабинет");
+        message.setReplyMarkup(KeyboardFactory.getPersonalAccountKeyBoard());
+        stateDto.setState(UserState.PERSONAL_ACCOUNT);
+        return message;
+    }
+    public BotApiMethod<?> processMainMenu(StateDto stateDto) {
+        SendMessage message = new SendMessage();
+        message.setChatId(stateDto.getChatId());
+        message.setText("Добро пожаловать в мини-приложение нашего салона красоты");
+        message.setReplyMarkup(KeyboardFactory.getMainMenuKeyBoard());
+        stateDto.setState(UserState.MAIN_MENU);
         return message;
     }
 }

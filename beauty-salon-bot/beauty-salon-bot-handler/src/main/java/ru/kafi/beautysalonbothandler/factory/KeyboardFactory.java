@@ -30,6 +30,7 @@ public class KeyboardFactory {
             });
             put(3, new HashMap<>() {
                 {
+                    put("Личный кабинет", "personal-account");
                     put("Завершить сеанс", "stop");
                     put("Контакты\\связаться", "info");
                 }
