@@ -26,6 +26,10 @@ public interface UserMapper {
     InfoEmployeeDto toEmployeeDto(User user);
 
     default Date toDate(String date) {
-        return Date.valueOf(date);
+        if(date!=null) {
+            return Date.valueOf(date);
+        }
+        return null;
+
     }
 }

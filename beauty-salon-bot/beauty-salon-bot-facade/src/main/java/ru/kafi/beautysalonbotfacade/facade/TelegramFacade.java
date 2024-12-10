@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbothandler.handler.CallbackQueryHandler;
 import ru.kafi.beautysalonbothandler.handler.ResponseHandler;
@@ -19,6 +20,7 @@ public class TelegramFacade {
 
     private final ResponseHandler responseHandler;
     private final CallbackQueryHandler callbackQueryHandler;
+    private final UserCache userCache;
 
     public BotApiMethod<?> handleUpdate(Update update) {
         if (update.hasCallbackQuery()) {
@@ -38,21 +40,26 @@ public class TelegramFacade {
     }
 
     public BotApiMethod<?> withMessage(Message message) {
+        StateDto.StateDtoBuilder stateB = StateDto.builder();
+        StateDto state = userCache.getState(message.getChatId());
 
-        StateDto state = StateDto.builder()
-                .chatId(message.getChatId())
-                .messageText(message.getText())
-                .state(UserState.MAIN_MENU)
-                .build();
-
-        return responseHandler.handle(state);
+        if(state == null) {
+            stateB.chatId(message.getChatId());
+            stateB.messageText(message.getText());
+            stateB.state(UserState.MAIN_MENU);
+            return responseHandler.handle(stateB.build());
+        } else {
+            state.setMessageText(message.getText());
+            return responseHandler.handle(state);
+        }
     }
 
     public BotApiMethod<?> withCallbackQuery(CallbackQuery callbackQuery) {
         long chatId = callbackQuery.getMessage().getChatId();
         StateDto stateDto = new StateDto();
         stateDto.setChatId(chatId);
+        stateDto.setData(callbackQuery.getData());
 
-        return callbackQueryHandler.processCallbackQuery(stateDto);
+        return callbackQueryHandler.processCallbackQuery(callbackQuery, stateDto);
     }
 }

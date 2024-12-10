@@ -45,6 +45,16 @@
             <artifactId>beauty-salon-bot-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>ru.kafi</groupId>
+            <artifactId>beauty-salon-api-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.kafi</groupId>
+            <artifactId>beauty-salon-api-gateway</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
