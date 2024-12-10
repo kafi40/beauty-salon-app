@@ -6,12 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.kafi.beautysalonapicommon.dto.user.*;
 import ru.kafi.beautysalonapicommon.dto.user.client.InfoClientDto;
-import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
-import ru.kafi.beautysalonapicommon.dto.user.client.UpdateClientDto;
-import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.EmployeeDto;
 import ru.kafi.beautysalonapicommon.dto.user.employee.NewEmployeeDto;
-import ru.kafi.beautysalonapicommon.dto.user.employee.UpdateEmployeeDto;
 import ru.kafi.beautysalonapiservice.service.UserService;
 
 import java.util.List;
@@ -22,60 +20,49 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/admin/clients/{clientId}")
+    @GetMapping("/admin/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public InfoClientDto adminGetClient(@PathVariable final Long clientId) {
-        log.info("API service (UserController): Admin get client with param id={}", clientId);
-        return userService.getClient(clientId);
+    public FullInfoUserDto adminGet(@PathVariable Long userId) {
+        log.info("API service (UserController): Admin get user with param ids={}", userId);
+        return userService.get(userId);
     }
 
-    @GetMapping("/admin/employees")
+    @GetMapping("/admin/users")
     @ResponseStatus(HttpStatus.OK)
-    public Page<InfoEmployeeDto> adminGetEmployeesPage(
-            @RequestParam(required = false) final List<Long> positionIds,
-            @RequestParam(defaultValue = "0") final int from,
-            @RequestParam(defaultValue = "10") final int size
+    public Page<InfoUserDto> adminGetPage(
+            @RequestParam(required = false) List<Long> positionIds,
+            @RequestParam(defaultValue = "0") int from,
+            @RequestParam(defaultValue = "10") int size
             ) {
-        log.info("API service (UserController): Admin get employees with param from={}, size={}", from, size);
-        return userService.getEmployeesPage(positionIds, PageRequest.of(from, size));
+        log.info("API service (UserController): Admin get users with param from={}, size={}", from, size);
+        return userService.getAll(positionIds, PageRequest.of(from, size));
     }
 
-    @PostMapping("/clients")
+    @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public InfoClientDto publicCreateClient(@RequestBody final NewClientDto newClient) {
-        log.info("API service (UserController): Public create client={}", newClient);
-        return userService.createClient(newClient);
+    public InfoClientDto publicCreate(@RequestBody NewUserDto newUser) {
+        log.info("API service (UserController): Public create user={}", newUser);
+        return userService.create(newUser);
     }
 
-    @PostMapping("/admin/employees")
+    @PostMapping("/admin/employee")
     @ResponseStatus(HttpStatus.CREATED)
-    public InfoEmployeeDto adminCreateEmployee(@RequestBody final NewEmployeeDto newEmployee) {
-        log.info("API service (UserController): Admin create employee={}", newEmployee);
-        return userService.createEmployee(newEmployee);
+    public EmployeeDto privateCreate(@RequestBody EmployeeDto newEmployee) {
+        log.info("API service (UserController): Public create employee={}", newEmployee);
+        return userService.create(newEmployee);
     }
 
-    @PatchMapping("/clients/{clientId}")
+    @PatchMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public InfoClientDto privatePatchClient(
-            @PathVariable final Long clientId,
-            @RequestBody final UpdateClientDto updateClient) {
-        log.info("API service (UserController): Private patch client={} by ID={}", updateClient, clientId);
-        return userService.updateClient(clientId, updateClient);
+    public InfoClientDto privatePatch(@PathVariable Long userId, @RequestBody UpdateUserDto updateUser) {
+        log.info("API service (UserController): Private patch user={} by ID={}", updateUser, userId);
+        return userService.update(userId, updateUser);
     }
 
-    @PatchMapping("/admin/employees/{employeeId}")
-    @ResponseStatus(HttpStatus.OK)
-    public InfoEmployeeDto adminPatchEmployee(
-            @PathVariable final Long employeeId,
-            @RequestBody final UpdateEmployeeDto updateEmployee) {
-        log.info("API service (UserController): Admin patch employee={} by ID={}", updateEmployee, employeeId);
-        return userService.updateEmployee(employeeId, updateEmployee);
-    }
-
-    @DeleteMapping("/clients/{clientId}")
+    @DeleteMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void privateDelete(@PathVariable final Long clientId) {
-        log.info("API service (UserController): Private delete client by ID={}", clientId);
-        userService.delete(clientId);
+    public void privateDelete(@PathVariable Long userId) {
+        log.info("API service (UserController): Private delete by ID={}", userId);
+        userService.delete(userId);
     }
 }

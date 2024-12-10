@@ -22,14 +22,14 @@ public class SalonServiceController {
 
     @GetMapping("/api/services/{serviceId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getPublic(@Positive @PathVariable final Long serviceId, final HttpServletRequest request) {
+    public ResponseEntity<?> getPublic(@Positive @PathVariable final Long serviceId, HttpServletRequest request) {
         log.info("API service (SalonServiceController): Get public service with ID={}", serviceId);
         return salonServiceClient.get(request);
     }
 
     @GetMapping("/api/services")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<?>> getListPublic(final HttpServletRequest request) {
+    public ResponseEntity<List<?>> getListPublic(HttpServletRequest request) {
         log.info("API service (SalonServiceController): Public get services");
         return salonServiceClient.getList(request);
     }
@@ -38,7 +38,7 @@ public class SalonServiceController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createAdmin(
             @Valid @RequestBody final NewSalonServiceDto newSalonService,
-            final HttpServletRequest request) {
+            HttpServletRequest request) {
         log.info("API service (SalonServiceController): Admin create new service={}", newSalonService);
         return salonServiceClient.create(request, newSalonService);
     }
@@ -48,7 +48,7 @@ public class SalonServiceController {
     public ResponseEntity<?> updateAdmin(
             @Positive @PathVariable final Long serviceId,
             @Valid @RequestBody final UpdateSalonServiceDto updateSalonService,
-            final HttpServletRequest request) {
+            HttpServletRequest request) {
         log.info("API service (SalonServiceController): Admin update service={} with ID={}", updateSalonService, serviceId);
         return salonServiceClient.update(request, updateSalonService);
     }
@@ -57,7 +57,7 @@ public class SalonServiceController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> deleteAdmin(
             @Positive @PathVariable final Long serviceId,
-            final HttpServletRequest request) {
+            HttpServletRequest request) {
         log.info("API service (SalonServiceController): Admin delete service with ID={}", serviceId);
         return salonServiceClient.delete(request);
     }
