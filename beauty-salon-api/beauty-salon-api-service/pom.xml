@@ -55,6 +55,13 @@
             <classifier>jakarta</classifier>
             <version>5.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <classifier>jakarta</classifier>
+            <version>5.1.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 
@@ -80,12 +87,7 @@
                     </execution>
                 </executions>
                 <dependencies>
-                    <dependency>
-                        <groupId>com.querydsl</groupId>
-                        <artifactId>querydsl-apt</artifactId>
-                        <classifier>jakarta</classifier>
-                        <version>5.1.0</version>
-                    </dependency>
+
                 </dependencies>
             </plugin>
         </plugins>
