@@ -12,5 +12,6 @@ public enum UserState {
     REGISTER,
     INFO,
     AWAITING_EMAIL,
-    PERSONAL_ACCOUNT
+    PERSONAL_ACCOUNT,
+    INACTIVE
 }
