@@ -43,18 +43,25 @@ public class TelegramFacade {
         StateDto.StateDtoBuilder stateB = StateDto.builder();
         StateDto state = userCache.getState(message.getChatId());
 
-        if(state == null) {
+        if (state == null) {
+            if (!message.getText().equals("/start")) {
+                return null;
+            }
             stateB.chatId(message.getChatId());
             stateB.messageText(message.getText());
             stateB.state(UserState.MAIN_MENU);
-            return responseHandler.handle(stateB.build());
+            state = stateB.build();
+            userCache.addNewState(message.getChatId(), state);
         } else {
             state.setMessageText(message.getText());
-            return responseHandler.handle(state);
         }
+        return responseHandler.handle(state);
     }
 
     public BotApiMethod<?> withCallbackQuery(CallbackQuery callbackQuery) {
+        StateDto state = userCache.getState(callbackQuery.getMessage().getChatId());
+
+
         long chatId = callbackQuery.getMessage().getChatId();
         StateDto stateDto = new StateDto();
         stateDto.setChatId(chatId);

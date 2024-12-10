@@ -37,9 +37,11 @@ public class CallbackQueryHandler {
             case "main-menu" -> {
                 return processMainMenu(state);
             }
+            case null, default -> {
+                return null;
+            }
         }
 
-        return null;
     }
 
     public BotApiMethod<?> processInfo(StateDto stateDto) {

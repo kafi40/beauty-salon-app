@@ -36,4 +36,9 @@ public class UserCache {
     public StateDto getState(long chatId) {
         return statesCache.get(chatId);
     }
+
+    public void clearUserCache(long chatId) {
+        statesCache.remove(chatId);
+        newUserCache.remove(chatId);
+    }
 }

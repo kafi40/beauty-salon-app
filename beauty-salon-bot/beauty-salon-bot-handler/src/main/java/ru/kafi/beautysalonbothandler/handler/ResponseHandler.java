@@ -23,6 +23,25 @@ public class ResponseHandler {
         long chatId = data.getChatId();
         String text = data.getMessageText();
 
+        if(data.getState()==UserState.INACTIVE) {
+            if(text.equals("/start")) {
+                return replyToMainMenu(data);
+            }
+            return null;
+        }
+
+        if(text.equals("/stop")) {
+
+            SendMessage message = new SendMessage();
+            message.setChatId(data.getChatId());
+            message.setText("Хорошо, бот больше не будет отправлять вам сообщения пока вы вновь его не активируете");
+            data.setState(UserState.INACTIVE);
+            userCache.addNewState(chatId, data);
+
+            return message;
+
+        }
+
 
         switch (data.getState()) {
             case MAIN_MENU -> {
