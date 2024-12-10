@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
+import ru.kafi.beautysalonbotcommon.util.Constants;
 import ru.kafi.beautysalonbotcommon.util.UserState;
 
 @RequiredArgsConstructor
@@ -26,9 +27,19 @@ public class CallbackQueryHandler {
             case "register" -> {
                 return processRegistration(callbackQuery, state);
             }
+            case "info" -> {
+                return processInfo(state);
+            }
         }
 
         return null;
+    }
+
+    public BotApiMethod<?> processInfo(StateDto stateDto) {
+        SendMessage message = new SendMessage();
+        message.setChatId(stateDto.getChatId());
+        message.setText(Constants.INFO_TEXT);
+        return message;
     }
 
     public BotApiMethod<?> processRegistration(CallbackQuery callbackQuery, StateDto state) {
