@@ -20,9 +20,11 @@ public class UserCache {
     public void addNewUser(long chatId, NewUserDto newUserDto) {
         newUserCache.put(chatId, newUserDto);
     }
+
     public NewUserDto getNewUser(long chatId) {
         return newUserCache.get(chatId);
     }
+
     public void addNewState(long chatId, StateDto stateDto) {
         statesCache.put(chatId, stateDto);
     }
@@ -30,9 +32,11 @@ public class UserCache {
     public void addRegistered(long telegramId) {
         registeredUsers.add(telegramId);
     }
+
     public Boolean isRegistered(Long id) {
         return registeredUsers.contains(id);
     }
+
     public StateDto getState(long chatId) {
         return statesCache.get(chatId);
     }

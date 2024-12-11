@@ -74,6 +74,7 @@ public class CallbackQueryHandler {
 
         return message;
     }
+
     public BotApiMethod<?> processPersonalAccount(StateDto stateDto) {
         SendMessage message = new SendMessage();
         message.setChatId(stateDto.getChatId());
@@ -82,6 +83,7 @@ public class CallbackQueryHandler {
         stateDto.setState(UserState.PERSONAL_ACCOUNT);
         return message;
     }
+
     public BotApiMethod<?> processMainMenu(StateDto stateDto) {
         SendMessage message = new SendMessage();
         message.setChatId(stateDto.getChatId());
