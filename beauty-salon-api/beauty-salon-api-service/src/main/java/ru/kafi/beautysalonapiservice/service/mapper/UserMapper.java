@@ -3,11 +3,10 @@ package ru.kafi.beautysalonapiservice.service.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
-import ru.kafi.beautysalonapicommon.dto.user.FullInfoUserDto;
 import ru.kafi.beautysalonapicommon.dto.user.client.InfoClientDto;
-import ru.kafi.beautysalonapicommon.dto.user.InfoUserDto;
-import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
-import ru.kafi.beautysalonapicommon.dto.user.employee.EmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.NewEmployeeDto;
 import ru.kafi.beautysalonapiservice.service.entity.User;
 
 import java.sql.Date;
@@ -15,19 +14,16 @@ import java.sql.Date;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
     @Mapping(target = "birthday", source = "birthday")
-    User toEntity(NewUserDto newUserDto);
+    User toEntity(NewClientDto newUser);
 
     @Mapping(target = "birthday", source = "birthday", dateFormat = "yyyy-MM-dd")
-    FullInfoUserDto toFullDto(User user);
-
-    @Mapping(target = "birthday", source = "birthday", dateFormat = "yyyy-MM-dd")
-    InfoUserDto toDto(User user);
+    User toEntity(NewEmployeeDto newEmployee);
 
     @Mapping(target = "birthday", source = "birthday", dateFormat = "yyyy-MM-dd")
     InfoClientDto toClientDto(User user);
 
     @Mapping(target = "birthday", source = "birthday", dateFormat = "yyyy-MM-dd")
-    User toEntity(EmployeeDto employeeDto);
+    InfoEmployeeDto toEmployeeDto(User user);
 
     default Date toDate(String date) {
         if (date != null) {
