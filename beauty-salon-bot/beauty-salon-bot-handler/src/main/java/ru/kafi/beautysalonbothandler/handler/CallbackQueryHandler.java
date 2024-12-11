@@ -1,8 +1,6 @@
 package ru.kafi.beautysalonbothandler.handler;
 
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,7 +15,6 @@ import ru.kafi.beautysalonbothandler.factory.KeyboardFactory;
 
 @RequiredArgsConstructor
 @Component
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CallbackQueryHandler {
 
     private final UserCache userCache;

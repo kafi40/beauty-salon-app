@@ -1,6 +1,8 @@
 package ru.kafi.beautysalonbothandler.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,19 +20,20 @@ public class ResponseHandler {
     private final UserTgClient client;
 
     private final UserCache userCache;
+    private final ErrorHandler errorHandler;
 
     public BotApiMethod<?> handle(StateDto data) {
         long chatId = data.getChatId();
         String text = data.getMessageText();
 
-        if(data.getState()==UserState.INACTIVE) {
-            if(text.equals("/start")) {
+        if (data.getState() == UserState.INACTIVE) {
+            if (text.equals("/start")) {
                 return replyToMainMenu(data);
             }
             return null;
         }
 
-        if(text.equals("/stop")) {
+        if (text.equals("/stop")) {
 
             SendMessage message = new SendMessage();
             message.setChatId(data.getChatId());
@@ -55,17 +58,21 @@ public class ResponseHandler {
             }
         }
     }
+
     private BotApiMethod<?> replyToEmail(StateDto data) {
         NewUserDto userDto = userCache.getNewUser(data.getChatId());
         userDto.setEmail(data.getMessageText());
         SendMessage message = new SendMessage();
         message.setChatId(data.getChatId());
 
+        ResponseEntity<?> response = client.post("api/users", userDto);
 
+        if (response.getStatusCode() != HttpStatusCode.valueOf(201)) {
+            return errorHandler.handle(data, response);
+        }
 
-        client.post("api/users", userDto);
         message.setText("Регистрация прошла успешно:\n" +
-                "Ваше имя: "+ userDto.getFirstName() + "\n" +
+                "Ваше имя: " + userDto.getFirstName() + "\n" +
                 "Почта: " + userDto.getEmail());
 
         data.setState(UserState.MAIN_MENU);
