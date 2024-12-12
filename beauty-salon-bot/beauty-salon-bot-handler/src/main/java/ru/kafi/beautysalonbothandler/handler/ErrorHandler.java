@@ -5,14 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
+import ru.kafi.beautysalonbothandler.sender.CustomSender;
 
 @Controller
 @RequiredArgsConstructor
 public class ErrorHandler {
     private final UserCache userCache;
+    private final CustomSender sender;
 
 
     public BotApiMethod<?> handle(StateDto data, ResponseEntity<?> response) {
@@ -28,10 +29,7 @@ public class ErrorHandler {
     }
 
     public BotApiMethod<?> handleBadRequest(StateDto data) {
-        SendMessage message = new SendMessage();
-        message.setChatId(data.getChatId());
-        message.setText("Произошла ошибка при обработке данных, убедитесь что данные корректны");
-
-        return message;
+        return sender.sendMessage("Произошла ошибка при обработке данных, убедитесь что данные корректны",
+                data.getChatId());
     }
 }

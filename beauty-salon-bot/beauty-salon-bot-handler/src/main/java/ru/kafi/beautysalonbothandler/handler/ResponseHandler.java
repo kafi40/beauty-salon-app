@@ -5,22 +5,22 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbotcommon.util.UserState;
 import ru.kafi.beautysalonbothandler.client.UserTgClient;
 import ru.kafi.beautysalonbothandler.factory.KeyboardFactory;
+import ru.kafi.beautysalonbothandler.sender.CustomSender;
 
 
 @Controller
 @RequiredArgsConstructor
 public class ResponseHandler {
     private final UserTgClient client;
-
     private final UserCache userCache;
     private final ErrorHandler errorHandler;
+    private final CustomSender sender;
 
     public BotApiMethod<?> handle(StateDto data) {
         long chatId = data.getChatId();
@@ -34,17 +34,12 @@ public class ResponseHandler {
         }
 
         if (text.equals("/stop")) {
-
-            SendMessage message = new SendMessage();
-            message.setChatId(data.getChatId());
-            message.setText("Хорошо, бот больше не будет отправлять вам сообщения пока вы вновь его не активируете");
             data.setState(UserState.INACTIVE);
             userCache.addNewState(chatId, data);
-
-            return message;
+            return sender.sendMessage("Хорошо, бот больше не будет отправлять вам сообщения пока вы вновь его не активируете",
+                    data.getChatId());
 
         }
-
 
         switch (data.getState()) {
             case MAIN_MENU -> {
@@ -62,41 +57,32 @@ public class ResponseHandler {
     private BotApiMethod<?> replyToEmail(StateDto data) {
         NewUserDto userDto = userCache.getNewUser(data.getChatId());
         userDto.setEmail(data.getMessageText());
-        SendMessage message = new SendMessage();
-        message.setChatId(data.getChatId());
-
         ResponseEntity<?> response = client.post("api/users", userDto);
 
         if (response.getStatusCode() != HttpStatusCode.valueOf(201)) {
             return errorHandler.handle(data, response);
         }
 
-        message.setText("Регистрация прошла успешно:\n" +
+        String messageText = "Регистрация прошла успешно:\n" +
                 "Ваше имя: " + userDto.getFirstName() + "\n" +
-                "Почта: " + userDto.getEmail());
+                "Почта: " + userDto.getEmail();
 
         data.setState(UserState.MAIN_MENU);
         userCache.addNewState(data.getChatId(), data);
         userCache.addRegistered(userDto.getTelegramId());
 
-        return message;
+        return sender.sendMessage(messageText, data.getChatId());
     }
 
     private BotApiMethod<?> replyToMainMenu(StateDto data) {
-        SendMessage message = new SendMessage();
-        message.setChatId(data.getChatId());
-        message.setText("Добро пожаловать в мини-приложение нашего салона красоты");
-        message.setReplyMarkup(KeyboardFactory.getMainMenuKeyBoard());
         data.setState(UserState.MAIN_MENU);
-        return message;
+        return sender.sendMessage("Добро пожаловать в мини-приложение нашего салона красоты",
+                data.getChatId(),
+                KeyboardFactory.getMainMenuKeyBoard());
     }
 
     public BotApiMethod<?> replyToStart(StateDto data) {
-        SendMessage message = new SendMessage();
-        message.setChatId(data.getChatId());
-        message.setText("Добро пожаловать");
         data.setState(UserState.MAIN_MENU);
-
-        return message;
+        return sender.sendMessage("Добро пожаловать", data.getChatId());
     }
 }
