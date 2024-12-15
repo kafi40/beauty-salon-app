@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 import ru.kafi.beautysalonbotfacade.facade.TelegramFacade;
 
@@ -26,6 +27,16 @@ public class BeautySalonBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        if(update.hasCallbackQuery()) {
+            if(update.getCallbackQuery().getData().equals("gallery")) {
+                try {
+                    execute(telegramFacade.handlePartialMethod(update));
+                } catch (TelegramApiException e) {
+                    return null;
+                }
+                return null;
+            }
+        }
         return telegramFacade.handleUpdate(update);
     }
 
@@ -38,4 +49,5 @@ public class BeautySalonBot extends SpringWebhookBot {
     public String getBotUsername() {
         return this.botUserName;
     }
+
 }

@@ -14,19 +14,22 @@ public class KeyboardFactory {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
         Map<Integer, Map<String, String>> menuMap = new HashMap<>() {{
-            put(1, new HashMap<>() {{
+            put(1, new HashMap<>() {
+                {
                     put("Прайс-лист", "price-list");
                     put("Подписаться", "subscribe");
-                    put("Галерея", "galery");
+                    put("Галерея", "gallery");
                 }
             });
-            put(2, new HashMap<>() {{
+            put(2, new HashMap<>() {
+                {
                     put("Записаться", "appointment");
                     put("Вывести мастеров", "masters");
                     put("Зарегистрировать аккаунт", "register");
                 }
             });
-            put(3, new HashMap<>() {{
+            put(3, new HashMap<>() {
+                {
                     put("Личный кабинет", "personal-account");
                     put("Завершить сеанс", "stop");
                     put("Контакты\\связаться", "info");
@@ -44,12 +47,14 @@ public class KeyboardFactory {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
         Map<Integer, Map<String, String>> menuMap = new HashMap<>() {{
-            put(1, new HashMap<>() {{
+            put(1, new HashMap<>() {
+                {
                     put("Информация об аккаунте", "account-info");
                     put("Изменить данные", "update-account");
                 }
             });
-            put(2, new HashMap<>() {{
+            put(2, new HashMap<>() {
+                {
                     put("<-Назад", "main-menu");
                     put("Ваши записи", "appointments");
                 }
