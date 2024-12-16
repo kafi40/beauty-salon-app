@@ -3,7 +3,6 @@ package ru.kafi.beautysalonapiservice.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.kafi.beautysalonapicommon.dto.position.InfoPositionDto;
 import ru.kafi.beautysalonapicommon.dto.position.NewPositionDto;

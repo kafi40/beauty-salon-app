@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 public class AuthenticationFilter extends GenericFilterBean {
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain filterChain)
             throws IOException, ServletException {
         try {
             Authentication authentication = AuthenticationService.getAuthentication((HttpServletRequest) request);
