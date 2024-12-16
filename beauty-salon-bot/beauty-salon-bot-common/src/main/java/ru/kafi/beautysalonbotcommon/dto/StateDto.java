@@ -14,4 +14,5 @@ public class StateDto {
     private String messageText;
     private String callback;
     private UserState state;
+    private String data;
 }

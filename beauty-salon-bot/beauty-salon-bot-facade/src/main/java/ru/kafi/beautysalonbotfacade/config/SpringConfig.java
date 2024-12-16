@@ -17,7 +17,7 @@ import ru.kafi.beautysalonbotfacade.facade.TelegramFacade;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-@ComponentScan(basePackages = "ru.kafi.beautysalonbothandler")
+@ComponentScan(basePackages = {"ru.kafi.beautysalonbothandler", "ru.kafi.beautysalonbotcommon"})
 public class SpringConfig {
     private final TelegramConfig telegramConfig;
 

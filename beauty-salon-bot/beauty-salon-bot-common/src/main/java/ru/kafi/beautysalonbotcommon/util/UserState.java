@@ -10,5 +10,8 @@ public enum UserState {
     APPOINTMENT,
     MAIN_MENU,
     REGISTER,
-    INFO
+    INFO,
+    AWAITING_EMAIL,
+    PERSONAL_ACCOUNT,
+    INACTIVE
 }
