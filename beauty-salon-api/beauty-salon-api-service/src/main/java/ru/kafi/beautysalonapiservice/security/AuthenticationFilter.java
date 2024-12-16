@@ -15,19 +15,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class AuthenticationFilter extends GenericFilterBean {
-
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain filterChain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         try {
             Authentication authentication = AuthenticationService.getAuthentication((HttpServletRequest) request);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (Exception exp) {
+        } catch (Exception e) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
             PrintWriter writer = httpResponse.getWriter();
-            writer.print(exp.getMessage());
+            writer.print(e.getMessage());
             writer.flush();
             writer.close();
         }

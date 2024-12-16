@@ -158,12 +158,12 @@ public abstract class Client {
 
     private ResponseEntity<?> error(Exception e) {
         log.error("API gateway (Client): Failed to access the server: {}", e.getMessage());
-        String findStr = "\"status\":";
-        int fIndex = e.getMessage().indexOf(findStr) + findStr.length();
-        int lIndex = fIndex + 3;
-        String status = e.getMessage().substring(fIndex, lIndex);
-        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(Integer.parseInt(status)));
-//        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
+//        String findStr = "\"status\":";
+//        int fIndex = e.getMessage().indexOf(findStr) + findStr.length();
+//        int lIndex = fIndex + 3;
+//        String status = e.getMessage().substring(fIndex, lIndex);
+//        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(Integer.parseInt(status)));
+        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
     }
 
     private String subPath(String path) {
