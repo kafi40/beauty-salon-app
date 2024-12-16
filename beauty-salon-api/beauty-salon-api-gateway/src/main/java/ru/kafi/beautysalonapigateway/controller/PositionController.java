@@ -22,21 +22,23 @@ public class PositionController {
 
     @GetMapping("/api/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> get(@Positive @PathVariable Long positionId, HttpServletRequest request) {
+    public ResponseEntity<?> get(@Positive @PathVariable final Long positionId, final HttpServletRequest request) {
         log.info("API gateway (PositionController): Get position with ID={}", positionId);
         return positionClient.get(request);
     }
 
     @GetMapping("/api/admin/positions")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<?>> getAll(HttpServletRequest request) {
+    public ResponseEntity<List<?>> getAll(final HttpServletRequest request) {
         log.info("API gateway (PositionController): Get positions");
         return positionClient.getList(request);
     }
 
     @PostMapping("/api/admin/positions")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@Valid @RequestBody NewPositionDto newPosition, HttpServletRequest request) {
+    public ResponseEntity<?> create(
+            @Valid @RequestBody final NewPositionDto newPosition,
+            final HttpServletRequest request) {
         log.info("API gateway (PositionController): Create position={}", newPosition);
         return positionClient.create(request, newPosition);
     }
@@ -44,8 +46,8 @@ public class PositionController {
     @PatchMapping("/api/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> update(
-            @Positive @PathVariable Long positionId,
-            @Valid @RequestBody UpdatePositionDto updatePosition,
+            @Positive @PathVariable final Long positionId,
+            @Valid @RequestBody final UpdatePositionDto updatePosition,
             HttpServletRequest request) {
         log.info("API gateway (PositionController): Update position={} with ID={}", updatePosition, positionId);
         return positionClient.update(request, updatePosition);
@@ -53,7 +55,7 @@ public class PositionController {
 
     @DeleteMapping("/api/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> delete(@Positive @PathVariable Long positionId, HttpServletRequest request) {
+    public ResponseEntity<?> delete(@Positive @PathVariable final Long positionId, final HttpServletRequest request) {
         log.info("API gateway (PositionController): Delete position with ID={}", positionId);
         return positionClient.delete(request);
     }

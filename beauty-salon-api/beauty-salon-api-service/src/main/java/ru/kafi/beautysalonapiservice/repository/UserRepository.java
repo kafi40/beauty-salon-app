@@ -7,4 +7,5 @@ import ru.kafi.beautysalonapiservice.service.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {
+    boolean existsByEmail(String email);
 }

@@ -7,6 +7,7 @@ import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
 import ru.kafi.beautysalonapicommon.dto.user.client.UpdateClientDto;
 import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
 import ru.kafi.beautysalonapicommon.dto.user.employee.NewEmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.UpdateEmployeeDto;
 
 import java.util.List;
 
@@ -19,7 +20,9 @@ public interface UserService {
 
     InfoEmployeeDto createEmployee(NewEmployeeDto newEmployee);
 
-    InfoClientDto updateClient(Long userId, UpdateClientDto updateClient);
+    InfoClientDto updateClient(Long clientId, UpdateClientDto updateClient);
+
+    InfoEmployeeDto updateEmployee(Long employeeId, UpdateEmployeeDto updateEmployee);
 
     void delete(Long userId);
 }

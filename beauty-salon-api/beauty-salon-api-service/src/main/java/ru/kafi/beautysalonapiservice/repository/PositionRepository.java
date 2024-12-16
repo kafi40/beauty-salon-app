@@ -6,4 +6,5 @@ import ru.kafi.beautysalonapiservice.service.entity.Position;
 
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Long> {
+    boolean existsByNameWithinIgnoreCase(String name);
 }

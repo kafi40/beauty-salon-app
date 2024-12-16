@@ -1,5 +1,6 @@
 package ru.kafi.beautysalonapiservice.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +10,7 @@ import ru.kafi.beautysalonapicommon.dto.position.NewPositionDto;
 import ru.kafi.beautysalonapicommon.dto.position.ShortPositionDto;
 import ru.kafi.beautysalonapicommon.dto.position.UpdatePositionDto;
 import ru.kafi.beautysalonapiservice.exception.NotFoundException;
+import ru.kafi.beautysalonapiservice.exception.ValueAlreadyUsedException;
 import ru.kafi.beautysalonapiservice.repository.PositionRepository;
 import ru.kafi.beautysalonapiservice.service.PositionService;
 import ru.kafi.beautysalonapiservice.service.entity.Position;
@@ -26,9 +28,7 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public InfoPositionDto get(Long positionId) {
         log.info("API service (PositionService): Try get()");
-        Position position =  positionRepository.findById(positionId)
-                .orElseThrow(() -> new NotFoundException(
-                        "API service (PositionService): Position with ID=" + positionId + " not found"));
+        Position position =  getPosition(positionId);
         log.info("API service (PositionService): Finish get()");
         return positionMapper.toDto(position);
     }
@@ -44,43 +44,47 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    @Transactional
     public InfoPositionDto create(NewPositionDto newPosition) {
         log.info("API service (PositionService): Try create()");
         Position position = positionMapper.toEntity(newPosition);
-        try {
-            position = positionRepository.save(position);
-        } catch (DataIntegrityViolationException e) {
-            System.out.println(e.getMessage());
-        }
+        if (positionRepository.existsByNameWithinIgnoreCase(position.getName()))
+            throw new ValueAlreadyUsedException("API service (PositionService): The name is already in use");
+        position = positionRepository.save(position);
         log.info("API service (PositionService): Finish create()");
         return positionMapper.toDto(position);
     }
 
     @Override
+    @Transactional
     public InfoPositionDto update(Long positionId, UpdatePositionDto updatePosition) {
         log.info("API service (PositionService): Try update()");
-        Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new NotFoundException(
-                        "API service (PositionService): Position with ID=" + positionId + " not found"));
-        if (updatePosition.getName() != null)
+        Position position = getPosition(positionId);
+        if (updatePosition.getName() != null) {
+            if (positionRepository.existsByNameWithinIgnoreCase(position.getName()))
+                throw new ValueAlreadyUsedException("API service (PositionService): The name is already in use");
             position.setName(updatePosition.getName());
+        }
         if (updatePosition.getMinSalary() != null)
             position.setMinSalary(updatePosition.getMinSalary());
         if (updatePosition.getMaxSalary() != null)
             position.setMaxSalary(updatePosition.getMaxSalary());
-        try {
-            position = positionRepository.save(position);
-        } catch (DataIntegrityViolationException e) {
-            System.out.println(e.getMessage());
-        }
+        position = positionRepository.save(position);
         log.info("API service (PositionService): Finish update()");
         return positionMapper.toDto(position);
     }
 
     @Override
+    @Transactional
     public void delete(Long positionId) {
         log.info("API service (PositionService): Try to delete()");
         positionRepository.deleteById(positionId);
         log.info("API service (PositionService): Finish delete()");
+    }
+
+    private Position getPosition(Long positionId) {
+        return positionRepository.findById(positionId)
+                .orElseThrow(() -> new NotFoundException(
+                        "API service (PositionService): Position with ID=" + positionId + " not found"));
     }
 }
