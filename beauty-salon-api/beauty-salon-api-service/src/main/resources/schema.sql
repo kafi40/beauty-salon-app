@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users(
     telegram_id BIGINT UNIQUE,
     position_id BIGINT,
     avatar_id BIGINT,
+    role VARCHAR(32),
     PRIMARY KEY (id)
 );
 

@@ -3,7 +3,6 @@ package ru.kafi.beautysalonapigateway.client.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.kafi.beautysalonapigateway.config.ClientConfig;
 import ru.kafi.beautysalonapigateway.util.RestResponsePage;
 
 import java.net.URI;
@@ -23,25 +23,28 @@ import java.util.Map;
 
 @Slf4j
 public abstract class Client {
-    protected final RestClient restClient;
-    @Value("${api-service.url}")
-    protected String baseUrl;
+    private final RestClient restClient;
+    private final String baseUrl;
+    private final String authKeyHeaderName;
 
-    protected Client(RestClient restClient) {
-        this.restClient = restClient;
+    protected Client(ClientConfig clientConfig) {
+        this.restClient = clientConfig.restClient();
+        this.baseUrl = clientConfig.getBaseUrl();
+        this.authKeyHeaderName = clientConfig.getAuthKeyHeaderName();
     }
 
-    protected ResponseEntity<?> get(String path) {
-        log.info("API gateway (Client): Try get by path={}", path);
+    protected ResponseEntity<?> get(HttpServletRequest request) {
+        log.info("API gateway (Client): Try get by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
-                .path(subPath(path))
+                .path(subPath(request.getRequestURI()))
                 .build()
                 .toUri();
         try {
             return restClient.get()
                     .uri(uri)
                     .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
+                    .header(authKeyHeaderName, request.getHeader(authKeyHeaderName))
                     .retrieve()
                     .toEntity(new ParameterizedTypeReference<>(){});
         } catch (Exception e) {
@@ -49,11 +52,11 @@ public abstract class Client {
         }
     }
 
-    protected Page<?> getPage(String path, HttpServletRequest request) {
-        log.info("API gateway (Client): Try getPage by path={}", path);
+    protected Page<?> getPage(HttpServletRequest request) {
+        log.info("API gateway (Client): Try getPage by path={}", request.getRequestURI());
         URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
-                .path(subPath(path))
+                .path(subPath(request.getRequestURI()))
                 .queryParams(setParams(request.getParameterMap()))
                 .build()
                 .toUri();
@@ -62,6 +65,7 @@ public abstract class Client {
             ResponseEntity<RestResponsePage<?>> responseEntity = restClient.get()
                     .uri(uri)
                     .accept(MediaType.APPLICATION_JSON)
+                    .header(authKeyHeaderName, request.getHeader(authKeyHeaderName))
                     .retrieve()
                     .toEntity(responseType);
             return responseEntity.getBody();
@@ -70,17 +74,18 @@ public abstract class Client {
         }
     }
 
-    protected ResponseEntity<List<?>> getList(String path, HttpServletRequest request) {
-        log.info("API gateway (Client): Try getList by path={}", path);
+    protected ResponseEntity<List<?>> getList(HttpServletRequest request) {
+        log.info("API gateway (Client): Try getList by path={}", request.getRequestURI());
         URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
-                .path(subPath(path))
+                .path(subPath(request.getRequestURI()))
                 .queryParams(setParams(request.getParameterMap()))
                 .build()
                 .toUri();
         try {
             return restClient.get()
                     .uri(uri)
+                    .header(authKeyHeaderName, request.getHeader(authKeyHeaderName))
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .toEntity(new ParameterizedTypeReference<>(){});
@@ -90,18 +95,18 @@ public abstract class Client {
         }
     }
 
-    protected ResponseEntity<?> post(String path, Object body) {
-        log.info("API gateway (Client): Try post by path={}", path);
+    protected ResponseEntity<?> post(HttpServletRequest request, Object body) {
+        log.info("API gateway (Client): Try post by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
-                .path(subPath(path))
+                .path(subPath(request.getRequestURI()))
                 .build()
                 .toUri();
-
         try {
             return restClient.post()
                     .uri(uri)
                     .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
+                    .header(authKeyHeaderName, request.getHeader(authKeyHeaderName))
                     .body(body)
                     .retrieve()
                     .toEntity(new ParameterizedTypeReference<>() {
@@ -111,17 +116,18 @@ public abstract class Client {
         }
     }
 
-    protected ResponseEntity<?> patch(String path, Object body) {
-        log.info("API gateway (Client): Try patch by path={}", path);
+    protected ResponseEntity<?> patch(HttpServletRequest request, Object body) {
+        log.info("API gateway (Client): Try patch by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
-                .path(subPath(path))
+                .path(subPath(request.getRequestURI()))
                 .build()
                 .toUri();
         try {
             return restClient.patch()
                     .uri(uri)
                     .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
+                    .header(authKeyHeaderName, request.getHeader(authKeyHeaderName))
                     .body(body)
                     .retrieve()
                     .toEntity(new ParameterizedTypeReference<>() {
@@ -131,17 +137,18 @@ public abstract class Client {
         }
     }
 
-    protected ResponseEntity<?> delete(String path) {
-        log.info("API gateway (Client): Try to delete by path={}", path);
+    protected ResponseEntity<?> delete(HttpServletRequest request) {
+        log.info("API gateway (Client): Try to delete by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
-                .path(subPath(path))
+                .path(subPath(request.getRequestURI()))
                 .build()
                 .toUri();
         try {
             return restClient.delete()
                     .uri(uri)
                     .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
+                    .header(authKeyHeaderName, request.getHeader(authKeyHeaderName))
                     .retrieve()
                     .toBodilessEntity();
         } catch (Exception e) {
@@ -151,11 +158,12 @@ public abstract class Client {
 
     private ResponseEntity<?> error(Exception e) {
         log.error("API gateway (Client): Failed to access the server: {}", e.getMessage());
-        String findStr = "\"status\":";
-        int fIndex = e.getMessage().indexOf(findStr) + findStr.length();
-        int lIndex = fIndex + 3;
-        String status = e.getMessage().substring(fIndex, lIndex);
-        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(Integer.parseInt(status)));
+//        String findStr = "\"status\":";
+//        int fIndex = e.getMessage().indexOf(findStr) + findStr.length();
+//        int lIndex = fIndex + 3;
+//        String status = e.getMessage().substring(fIndex, lIndex);
+//        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(Integer.parseInt(status)));
+        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
     }
 
     private String subPath(String path) {
