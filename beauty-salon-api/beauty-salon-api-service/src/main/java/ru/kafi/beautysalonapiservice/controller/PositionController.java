@@ -20,7 +20,7 @@ public class PositionController {
 
     @GetMapping("/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.OK)
-    public InfoPositionDto adminGet(@PathVariable Long positionId) {
+    public InfoPositionDto adminGet(@PathVariable final Long positionId) {
         log.info("API service (PositionController): Admin get position with ID={}", positionId);
         return positionService.get(positionId);
     }
@@ -34,21 +34,23 @@ public class PositionController {
 
     @PostMapping("/admin/positions")
     @ResponseStatus(HttpStatus.CREATED)
-    public InfoPositionDto adminCreate(@RequestBody NewPositionDto newPosition) {
+    public InfoPositionDto adminCreate(@RequestBody final NewPositionDto newPosition) {
         log.info("API service (PositionController): Admin create position={}", newPosition);
         return positionService.create(newPosition);
     }
 
     @PatchMapping("/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.OK)
-    public InfoPositionDto adminUpdate(@PathVariable Long positionId, @RequestBody UpdatePositionDto updatePosition) {
+    public InfoPositionDto adminUpdate(
+            @PathVariable final Long positionId,
+            @RequestBody final UpdatePositionDto updatePosition) {
         log.info("API service (PositionController): Admin update position={} with ID={}", updatePosition, positionId);
         return positionService.update(positionId, updatePosition);
     }
 
     @DeleteMapping("/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void adminDelete(@PathVariable Long positionId) {
+    public void adminDelete(@PathVariable final Long positionId) {
         log.info("API service (PositionController): Admin delete position with ID={}", positionId);
         positionService.delete(positionId);
     }

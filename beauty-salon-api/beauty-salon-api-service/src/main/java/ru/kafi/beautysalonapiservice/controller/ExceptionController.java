@@ -36,4 +36,10 @@ public class ExceptionController {
                 LocalDateTime.now()
         );
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> valueAlreadyUsedException(final ValueAlreadyUsedException e) {
+        return Map.of("error:", e.getMessage());
+    }
 }
