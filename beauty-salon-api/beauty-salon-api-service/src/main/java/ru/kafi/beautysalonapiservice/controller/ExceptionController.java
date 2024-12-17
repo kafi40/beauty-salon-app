@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.kafi.beautysalonapicommon.dto.ApiErrorDto;
 import ru.kafi.beautysalonapiservice.exception.NotFoundException;
+import ru.kafi.beautysalonapiservice.exception.ValueAlreadyUsedException;
 
 import java.time.LocalDateTime;
 
@@ -39,7 +40,13 @@ public class ExceptionController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> valueAlreadyUsedException(final ValueAlreadyUsedException e) {
-        return Map.of("error:", e.getMessage());
+    public ApiErrorDto valueAlreadyUsedException(final ValueAlreadyUsedException e) {
+        log.info("Value already used exception - {}", e.getMessage(), e);
+        return new ApiErrorDto(
+                HttpStatus.BAD_REQUEST.toString(),
+                "Not found error",
+                e.getMessage(),
+                LocalDateTime.now()
+        );
     }
 }
