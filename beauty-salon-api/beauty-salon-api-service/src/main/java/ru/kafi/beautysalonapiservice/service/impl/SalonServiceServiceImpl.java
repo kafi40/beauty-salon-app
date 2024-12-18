@@ -46,7 +46,7 @@ public class SalonServiceServiceImpl implements SalonServiceService {
     public InfoSalonServiceDto create(NewSalonServiceDto newSalonService) {
         log.info("API service (SalonServiceService): Try create()");
         SalonService salonService = salonServiceMapper.toEntity(newSalonService);
-        if (salonServiceRepository.existsByNameWithinIgnoreCase(newSalonService.getName()))
+        if (salonServiceRepository.existsByNameEqualsIgnoreCase(newSalonService.getName()))
             throw new ValueAlreadyUsedException("API service (SalonServiceService): The name is already in use");
         salonService = salonServiceRepository.save(salonService);
         log.info("API service (SalonServiceService): Finish create()");
@@ -59,7 +59,7 @@ public class SalonServiceServiceImpl implements SalonServiceService {
         log.info("API service (SalonServiceService): Try update()");
         SalonService salonService = getSalonService(serviceId);
         if (updateSalonService.getName() != null) {
-            if (salonServiceRepository.existsByNameWithinIgnoreCase(updateSalonService.getName()))
+            if (salonServiceRepository.existsByNameEqualsIgnoreCase(updateSalonService.getName()))
                 throw new ValueAlreadyUsedException("API service (SalonServiceService): The name is already in use");
             salonService.setName(updateSalonService.getName());
         }

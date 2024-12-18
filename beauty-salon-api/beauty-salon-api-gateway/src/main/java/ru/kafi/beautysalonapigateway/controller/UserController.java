@@ -10,14 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kafi.beautysalonapicommon.dto.user.client.InfoClientDto;
 import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
 import ru.kafi.beautysalonapicommon.dto.user.client.UpdateClientDto;
-import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
 import ru.kafi.beautysalonapicommon.dto.user.employee.NewEmployeeDto;
 import ru.kafi.beautysalonapicommon.dto.user.employee.UpdateEmployeeDto;
 import ru.kafi.beautysalonapigateway.annotation.PositiveList;
-import ru.kafi.beautysalonapigateway.client.UserClient;
+import ru.kafi.beautysalonapigateway.client.Client;
 
 import java.util.List;
 
@@ -25,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
-    private final UserClient userClient;
+    private final Client userClient;
 
     @GetMapping("/api/admin/clients/{clientId}")
     @ResponseStatus(HttpStatus.OK)

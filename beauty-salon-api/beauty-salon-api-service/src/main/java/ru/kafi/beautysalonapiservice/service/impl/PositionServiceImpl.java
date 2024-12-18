@@ -47,7 +47,7 @@ public class PositionServiceImpl implements PositionService {
     public InfoPositionDto create(NewPositionDto newPosition) {
         log.info("API service (PositionService): Try create()");
         Position position = positionMapper.toEntity(newPosition);
-        if (positionRepository.existsByNameWithinIgnoreCase(position.getName()))
+        if (positionRepository.existsByNameEqualsIgnoreCase(position.getName()))
             throw new ValueAlreadyUsedException("API service (PositionService): The name is already in use");
         position = positionRepository.save(position);
         log.info("API service (PositionService): Finish create()");
@@ -60,7 +60,7 @@ public class PositionServiceImpl implements PositionService {
         log.info("API service (PositionService): Try update()");
         Position position = getPosition(positionId);
         if (updatePosition.getName() != null) {
-            if (positionRepository.existsByNameWithinIgnoreCase(position.getName()))
+            if (positionRepository.existsByNameEqualsIgnoreCase(position.getName()))
                 throw new ValueAlreadyUsedException("API service (PositionService): The name is already in use");
             position.setName(updatePosition.getName());
         }

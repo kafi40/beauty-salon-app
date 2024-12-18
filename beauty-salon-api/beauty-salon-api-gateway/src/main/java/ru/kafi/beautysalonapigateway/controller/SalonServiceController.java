@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kafi.beautysalonapicommon.dto.salon_service.NewSalonServiceDto;
 import ru.kafi.beautysalonapicommon.dto.salon_service.UpdateSalonServiceDto;
-import ru.kafi.beautysalonapigateway.client.SalonServiceClient;
+import ru.kafi.beautysalonapigateway.client.Client;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class SalonServiceController {
-    private final SalonServiceClient salonServiceClient;
+    private final Client salonServiceClient;
 
     @GetMapping("/api/services/{serviceId}")
     @ResponseStatus(HttpStatus.OK)

@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-public abstract class Client {
+public abstract class AbstractClient {
     private final RestClient restClient;
     private final String baseUrl;
     private final String authKeyHeaderName;
 
-    protected Client(ClientConfig clientConfig) {
+    protected AbstractClient(ClientConfig clientConfig) {
         this.restClient = clientConfig.restClient();
         this.baseUrl = clientConfig.getBaseUrl();
         this.authKeyHeaderName = clientConfig.getAuthKeyHeaderName();
@@ -95,7 +95,7 @@ public abstract class Client {
         }
     }
 
-    protected ResponseEntity<?> post(HttpServletRequest request, Object body) {
+    protected <T> ResponseEntity<?> create(HttpServletRequest request, T body) {
         log.info("API gateway (Client): Try post by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
@@ -116,7 +116,7 @@ public abstract class Client {
         }
     }
 
-    protected ResponseEntity<?> patch(HttpServletRequest request, Object body) {
+    protected <T> ResponseEntity<?> update(HttpServletRequest request, T body) {
         log.info("API gateway (Client): Try patch by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
@@ -158,12 +158,11 @@ public abstract class Client {
 
     private ResponseEntity<?> error(Exception e) {
         log.error("API gateway (Client): Failed to access the server: {}", e.getMessage());
-        String findStr = "\"status\":";
-        int fIndex = e.getMessage().indexOf(findStr) + findStr.length();
-        int lIndex = fIndex + 3;
-        String status = e.getMessage().substring(fIndex, lIndex);
-        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(Integer.parseInt(status)));
-//        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
+//        String findStr = "\"status\":";
+//        int fIndex = e.getMessage().indexOf(findStr) + findStr.length();
+//        int lIndex = fIndex + 3;
+//        String status = e.getMessage().substring(fIndex, lIndex);
+        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(Integer.parseInt("500")));
     }
 
     private String subPath(String path) {

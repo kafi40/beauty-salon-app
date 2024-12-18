@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kafi.beautysalonapicommon.dto.position.NewPositionDto;
 import ru.kafi.beautysalonapicommon.dto.position.UpdatePositionDto;
-import ru.kafi.beautysalonapigateway.client.PositionClient;
+import ru.kafi.beautysalonapigateway.client.Client;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PositionController {
-    private final PositionClient positionClient;
+    private final Client positionClient;
 
     @GetMapping("/api/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.OK)

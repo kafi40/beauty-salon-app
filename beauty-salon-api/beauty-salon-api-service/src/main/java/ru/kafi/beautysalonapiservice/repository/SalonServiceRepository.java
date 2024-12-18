@@ -6,5 +6,5 @@ import ru.kafi.beautysalonapiservice.service.entity.SalonService;
 
 @Repository
 public interface SalonServiceRepository extends JpaRepository<SalonService, Long> {
-    boolean existsByNameWithinIgnoreCase(String name);
+    boolean existsByNameEqualsIgnoreCase(String name);
 }
