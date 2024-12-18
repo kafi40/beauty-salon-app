@@ -26,6 +26,16 @@ public class BeautySalonBot extends SpringWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        if(update.hasCallbackQuery()) {
+            if(update.getCallbackQuery().getData().equals("gallery")) {
+                try {
+                    execute(telegramFacade.handleSendMediaGroup(update));
+                } catch (Exception e) {
+                    return telegramFacade.handleUpdate(update);
+                }
+                return null;
+            }
+        }
         return telegramFacade.handleUpdate(update);
     }
 
@@ -38,4 +48,5 @@ public class BeautySalonBot extends SpringWebhookBot {
     public String getBotUsername() {
         return this.botUserName;
     }
+
 }

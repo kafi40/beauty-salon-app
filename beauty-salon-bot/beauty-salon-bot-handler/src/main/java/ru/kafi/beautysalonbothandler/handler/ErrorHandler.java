@@ -9,6 +9,7 @@ import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbothandler.sender.CustomSender;
 
+
 @Controller
 @RequiredArgsConstructor
 public class ErrorHandler {
@@ -26,6 +27,11 @@ public class ErrorHandler {
                 return null;
             }
         }
+    }
+
+    public BotApiMethod<?> handleGaleryAccessError(StateDto data) {
+        return sender.sendMessage("Произошла ошибка при обработке вашего запроса, пожалуйста повторите " +
+                "позже", data.getChatId());
     }
 
     public BotApiMethod<?> handleBadRequest(StateDto data) {

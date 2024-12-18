@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -39,6 +40,13 @@ public class TelegramFacade {
         return null;
     }
 
+    public SendMediaGroup handleSendMediaGroup(Update update) {
+        CallbackQuery callbackQuery = update.getCallbackQuery();
+        StateDto state = userCache.getState(callbackQuery.getMessage().getChatId());
+
+        return callbackQueryHandler.processGallery(state);
+    }
+
     public BotApiMethod<?> withMessage(Message message) {
         StateDto.StateDtoBuilder stateB = StateDto.builder();
         StateDto state = userCache.getState(message.getChatId());
@@ -69,4 +77,5 @@ public class TelegramFacade {
 
         return callbackQueryHandler.processCallbackQuery(callbackQuery, stateDto);
     }
+
 }
