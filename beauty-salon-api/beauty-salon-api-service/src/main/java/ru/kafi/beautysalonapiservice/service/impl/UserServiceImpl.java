@@ -38,63 +38,54 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public InfoClientDto getClient(Long clientId) {
-        log.info("API service (UserService): Try getClient()");
         User user = getUser(clientId);
-        log.info("API service (UserService): Finish getClient()");
         return userMapper.toClientDto(user);
     }
 
     @Override
     public Page<InfoEmployeeDto> getEmployeesPage(List<Long> positionIds, PageRequest page) {
-        log.info("API service (UserService): Try getEmployeesPage()");
         BooleanBuilder query = new BooleanBuilder();
         QUser qUser = QUser.user;
         if (positionIds != null)
             query.and(qUser.position.id.in(positionIds));
         Page<User> users = userRepository.findAll(query, page);
-        log.info("API service (UserService): Finish getEmployeesPage().");
         return users.map(userMapper::toEmployeeDto);
     }
 
     @Override
     @Transactional
     public InfoClientDto createClient(NewClientDto newUser) {
-        log.info("API service (UserService): Try createClient()");
         if (userRepository.existsByEmail(newUser.getEmail()))
             throw new ValueAlreadyUsedException("API service (UserService): The mail is already in use");
         User user = userMapper.toEntity(newUser);
-        log.info("API service (UserService): Finish createClient()");
+        user = userRepository.save(user);
         return userMapper.toClientDto(user);
     }
 
     @Override
     @Transactional
     public InfoEmployeeDto createEmployee(NewEmployeeDto newEmployee) {
-        log.info("API service (UserService): Try createEmployee()");
         if (userRepository.existsByEmail(newEmployee.getEmail()))
             throw new ValueAlreadyUsedException("API service (UserService): The mail is already in use");
         User user = userMapper.toEntity(newEmployee);
         Position position = getPosition(newEmployee.getPositionId());
         user.setPosition(position);
-        log.info("API service (UserService): Finish createEmployee()");
+        user = userRepository.save(user);
         return userMapper.toEmployeeDto(user);
     }
 
     @Override
     @Transactional
     public InfoClientDto updateClient(Long clientId, UpdateClientDto updateClient) {
-        log.info("API service (UserService): Try updateClient()");
         User user = getUser(clientId);
         updateUser(user, updateClient);
         user = userRepository.save(user);
-        log.info("API service (UserService): Finish updateClient()");
         return userMapper.toClientDto(user);
     }
 
     @Override
     @Transactional
     public InfoEmployeeDto updateEmployee(Long employeeId, UpdateEmployeeDto updateEmployee) {
-        log.info("API service (UserService): Try updateEmployee()");
         User user = getUser(employeeId);
         updateUser(user, updateEmployee);
         if (updateEmployee.getPositionId() != null) {
@@ -102,16 +93,13 @@ public class UserServiceImpl implements UserService {
             user.setPosition(position);
         }
         user = userRepository.save(user);
-        log.info("API service (UserService): Finish updateEmployee()");
         return userMapper.toEmployeeDto(user);
     }
 
     @Override
     @Transactional
     public void delete(Long userId) {
-        log.info("API service (UserService): Try delete()");
         userRepository.deleteById(userId);
-        log.info("API service (UserService): Finish delete()");
     }
 
     private void updateUser(User user, UpdateUserDto updateUser) {

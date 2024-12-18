@@ -26,17 +26,13 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public InfoPositionDto get(Long positionId) {
-        log.info("API service (PositionService): Try get()");
         Position position =  getPosition(positionId);
-        log.info("API service (PositionService): Finish get()");
         return positionMapper.toDto(position);
     }
 
     @Override
     public List<ShortPositionDto> getAll() {
-        log.info("API service (PositionService): Try getAll()");
         List<Position> positions = positionRepository.findAll();
-        log.info("API service (PositionService): Finish getAll()");
         return positions.stream()
                 .map(positionMapper::toShortDto)
                 .toList();
@@ -45,19 +41,16 @@ public class PositionServiceImpl implements PositionService {
     @Override
     @Transactional
     public InfoPositionDto create(NewPositionDto newPosition) {
-        log.info("API service (PositionService): Try create()");
         Position position = positionMapper.toEntity(newPosition);
         if (positionRepository.existsByNameEqualsIgnoreCase(position.getName()))
             throw new ValueAlreadyUsedException("API service (PositionService): The name is already in use");
         position = positionRepository.save(position);
-        log.info("API service (PositionService): Finish create()");
         return positionMapper.toDto(position);
     }
 
     @Override
     @Transactional
     public InfoPositionDto update(Long positionId, UpdatePositionDto updatePosition) {
-        log.info("API service (PositionService): Try update()");
         Position position = getPosition(positionId);
         if (updatePosition.getName() != null) {
             if (positionRepository.existsByNameEqualsIgnoreCase(position.getName()))
@@ -69,16 +62,13 @@ public class PositionServiceImpl implements PositionService {
         if (updatePosition.getMaxSalary() != null)
             position.setMaxSalary(updatePosition.getMaxSalary());
         position = positionRepository.save(position);
-        log.info("API service (PositionService): Finish update()");
         return positionMapper.toDto(position);
     }
 
     @Override
     @Transactional
     public void delete(Long positionId) {
-        log.info("API service (PositionService): Try to delete()");
         positionRepository.deleteById(positionId);
-        log.info("API service (PositionService): Finish delete()");
     }
 
     private Position getPosition(Long positionId) {

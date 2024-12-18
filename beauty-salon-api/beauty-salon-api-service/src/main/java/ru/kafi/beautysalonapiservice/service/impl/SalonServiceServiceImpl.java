@@ -25,17 +25,13 @@ public class SalonServiceServiceImpl implements SalonServiceService {
 
     @Override
     public InfoSalonServiceDto get(Long serviceId) {
-        log.info("API service (SalonServiceService): Try get()");
         SalonService salonService = getSalonService(serviceId);
-        log.info("API service (SalonServiceService): Finish get()");
         return salonServiceMapper.toDto(salonService);
     }
 
     @Override
     public List<InfoSalonServiceDto> getAll() {
-        log.info("API service (SalonServiceService): Try getAll()");
         List<SalonService> salonServiceList = salonServiceRepository.findAll();
-        log.info("API service (SalonServiceService): Finish getAll()");
         return salonServiceList.stream()
                 .map(salonServiceMapper::toDto)
                 .toList();
@@ -44,19 +40,16 @@ public class SalonServiceServiceImpl implements SalonServiceService {
     @Override
     @Transactional
     public InfoSalonServiceDto create(NewSalonServiceDto newSalonService) {
-        log.info("API service (SalonServiceService): Try create()");
         SalonService salonService = salonServiceMapper.toEntity(newSalonService);
         if (salonServiceRepository.existsByNameEqualsIgnoreCase(newSalonService.getName()))
             throw new ValueAlreadyUsedException("API service (SalonServiceService): The name is already in use");
         salonService = salonServiceRepository.save(salonService);
-        log.info("API service (SalonServiceService): Finish create()");
         return salonServiceMapper.toDto(salonService);
     }
 
     @Override
     @Transactional
     public InfoSalonServiceDto update(Long serviceId, UpdateSalonServiceDto updateSalonService) {
-        log.info("API service (SalonServiceService): Try update()");
         SalonService salonService = getSalonService(serviceId);
         if (updateSalonService.getName() != null) {
             if (salonServiceRepository.existsByNameEqualsIgnoreCase(updateSalonService.getName()))
@@ -70,16 +63,13 @@ public class SalonServiceServiceImpl implements SalonServiceService {
         if (updateSalonService.getDuration() != null)
             salonService.setDuration(updateSalonService.getDuration());
         salonService = salonServiceRepository.save(salonService);
-        log.info("API service (SalonServiceService): Finish update()");
         return salonServiceMapper.toDto(salonService);
     }
 
     @Override
     @Transactional
     public void delete(Long serviceId) {
-        log.info("API service (SalonServiceService): Try delete()");
         salonServiceRepository.deleteById(serviceId);
-        log.info("API service (SalonServiceService): Finish delete()");
     }
 
     private SalonService getSalonService(Long serviceId) {

@@ -34,7 +34,6 @@ public abstract class AbstractClient {
     }
 
     protected ResponseEntity<?> get(HttpServletRequest request) {
-        log.info("API gateway (Client): Try get by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
@@ -53,7 +52,6 @@ public abstract class AbstractClient {
     }
 
     protected Page<?> getPage(HttpServletRequest request) {
-        log.info("API gateway (Client): Try getPage by path={}", request.getRequestURI());
         URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
@@ -75,7 +73,6 @@ public abstract class AbstractClient {
     }
 
     protected ResponseEntity<List<?>> getList(HttpServletRequest request) {
-        log.info("API gateway (Client): Try getList by path={}", request.getRequestURI());
         URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
@@ -96,7 +93,6 @@ public abstract class AbstractClient {
     }
 
     protected <T> ResponseEntity<?> create(HttpServletRequest request, T body) {
-        log.info("API gateway (Client): Try post by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
@@ -117,7 +113,6 @@ public abstract class AbstractClient {
     }
 
     protected <T> ResponseEntity<?> update(HttpServletRequest request, T body) {
-        log.info("API gateway (Client): Try patch by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
@@ -138,7 +133,6 @@ public abstract class AbstractClient {
     }
 
     protected ResponseEntity<?> delete(HttpServletRequest request) {
-        log.info("API gateway (Client): Try to delete by path={}", request.getRequestURI());
         URI uri  = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))

@@ -12,13 +12,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 @Slf4j
 public class CustomSender {
 
-
     public BotApiMethod<?> sendMessage(String message, long chatId) {
         SendMessage msg = new SendMessage();
         msg.setText(message);
         msg.setChatId(chatId);
         return msg;
     }
+
     public BotApiMethod<?> sendMessage(String message, long chatId, ReplyKeyboard keyboard) {
         SendMessage msg = new SendMessage();
         msg.setText(message);
