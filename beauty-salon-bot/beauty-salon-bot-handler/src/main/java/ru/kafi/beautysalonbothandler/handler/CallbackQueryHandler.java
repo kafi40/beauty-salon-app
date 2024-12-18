@@ -1,6 +1,7 @@
 package ru.kafi.beautysalonbothandler.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
@@ -20,6 +21,9 @@ public class CallbackQueryHandler {
 
     private final UserCache userCache;
     private final CustomSender sender;
+    private final ErrorHandler errorHandler;
+    @Value("${photo-location.path}")
+    private String galeryPath;
 
     public BotApiMethod<?> processCallbackQuery(CallbackQuery callbackQuery, StateDto state) {
 
@@ -36,6 +40,9 @@ public class CallbackQueryHandler {
             case "main-menu" -> {
                 return processMainMenu(state);
             }
+            case "gallery" -> {
+                return errorHandler.handleGaleryAccessError(state);
+            }
             case null, default -> {
                 return null;
             }
@@ -45,7 +52,7 @@ public class CallbackQueryHandler {
 
     public SendMediaGroup processGallery(StateDto stateDto) {
         return sender.sendMessage("Вот фотографии из нашего салона", stateDto.getChatId(),
-                "F:\\PhotoTest");
+                galeryPath);
     }
 
     private BotApiMethod<?> processInfo(StateDto stateDto) {

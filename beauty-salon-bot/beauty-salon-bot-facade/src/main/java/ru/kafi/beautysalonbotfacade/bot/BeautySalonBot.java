@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 import ru.kafi.beautysalonbotfacade.facade.TelegramFacade;
 
@@ -30,9 +29,9 @@ public class BeautySalonBot extends SpringWebhookBot {
         if(update.hasCallbackQuery()) {
             if(update.getCallbackQuery().getData().equals("gallery")) {
                 try {
-                    execute(telegramFacade.handlePartialMethod(update));
-                } catch (TelegramApiException e) {
-                    return null;
+                    execute(telegramFacade.handleSendMediaGroup(update));
+                } catch (Exception e) {
+                    return telegramFacade.handleUpdate(update);
                 }
                 return null;
             }

@@ -42,7 +42,6 @@ public class CustomSender {
         List<InputMedia> photoList = new ArrayList<>();
         File folder = new java.io.File(folderPath);
         File[] imageList = folder.listFiles();
-
         if (imageList != null) {
             for (File file : imageList) {
                 if (file.isFile()) {

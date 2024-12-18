@@ -40,7 +40,7 @@ public class TelegramFacade {
         return null;
     }
 
-    public SendMediaGroup handlePartialMethod(Update update) {
+    public SendMediaGroup handleSendMediaGroup(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         StateDto state = userCache.getState(callbackQuery.getMessage().getChatId());
 
