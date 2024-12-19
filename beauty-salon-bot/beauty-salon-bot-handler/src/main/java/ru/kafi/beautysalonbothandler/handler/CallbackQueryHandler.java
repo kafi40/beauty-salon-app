@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
-import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbotcommon.util.Constants;
@@ -51,7 +51,7 @@ public class CallbackQueryHandler {
             return sender.sendMessage("Вы уже зарегистрированы", state.getChatId());
         }
 
-        NewUserDto newUserDto = new NewUserDto();
+        NewClientDto newUserDto = new NewClientDto();
         User from = callbackQuery.getFrom();
 
         newUserDto.setFirstName(from.getFirstName());

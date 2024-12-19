@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbotcommon.util.UserState;
-import ru.kafi.beautysalonbothandler.client.UserTgClient;
+import ru.kafi.beautysalonbothandler.client.Client;
 import ru.kafi.beautysalonbothandler.factory.KeyboardFactory;
 import ru.kafi.beautysalonbothandler.sender.CustomSender;
 
@@ -17,7 +17,7 @@ import ru.kafi.beautysalonbothandler.sender.CustomSender;
 @Controller
 @RequiredArgsConstructor
 public class ResponseHandler {
-    private final UserTgClient client;
+    private final Client client;
     private final UserCache userCache;
     private final ErrorHandler errorHandler;
     private final CustomSender sender;
@@ -55,9 +55,9 @@ public class ResponseHandler {
     }
 
     private BotApiMethod<?> replyToEmail(StateDto data) {
-        NewUserDto userDto = userCache.getNewUser(data.getChatId());
+        NewClientDto userDto = userCache.getNewUser(data.getChatId());
         userDto.setEmail(data.getMessageText());
-        ResponseEntity<?> response = client.post("api/users", userDto);
+        ResponseEntity<?> response = client.post("api/clients", userDto);
 
         if (response.getStatusCode() != HttpStatusCode.valueOf(201)) {
             return errorHandler.handle(data, response);
