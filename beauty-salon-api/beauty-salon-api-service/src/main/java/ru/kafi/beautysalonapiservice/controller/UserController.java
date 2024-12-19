@@ -1,58 +1,78 @@
 package ru.kafi.beautysalonapiservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.kafi.beautysalonapicommon.dto.user.*;
+import ru.kafi.beautysalonapicommon.dto.user.client.InfoClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.UpdateClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.NewEmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.UpdateEmployeeDto;
 import ru.kafi.beautysalonapiservice.service.UserService;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/admin/users/{userId}")
+    @GetMapping("/admin/clients/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public FullInfoUserDto get(@PathVariable Long userId) {
-        log.info("API service (UserController): Get user with param ids={}", userId);
-        return userService.get(userId);
+    public InfoClientDto adminGetClient(@PathVariable final Long clientId) {
+        return userService.getClient(clientId);
     }
 
-    @GetMapping("/admin/users")
+    @GetMapping("/clients/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public Page<InfoUserDto> getAll(
-            @RequestParam(required = false) List<Long> positionIds,
-            @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size
+    public InfoClientDto privateGetClient(@PathVariable final Long clientId) {
+        return userService.getClient(clientId);
+    }
+
+    @GetMapping("/admin/employees")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<InfoEmployeeDto> adminGetEmployeesPage(
+            @RequestParam(required = false) final List<Long> positionIds,
+            @RequestParam(defaultValue = "0") final int from,
+            @RequestParam(defaultValue = "10") final int size
             ) {
-        log.info("API service (UserController): Get user with param from={}, size={}", from, size);
-        return userService.getAll(positionIds, PageRequest.of(from, size));
+        return userService.getEmployeesPage(positionIds, PageRequest.of(from, size));
     }
 
-    @PostMapping("/users")
+    @PostMapping("/clients")
     @ResponseStatus(HttpStatus.CREATED)
-    public InfoClientDto create(@RequestBody NewUserDto newUser) {
-        log.info("API service (UserController): Create user {}", newUser);
-        return userService.create(newUser);
+    public InfoClientDto publicCreateClient(@RequestBody final NewClientDto newClient) {
+        return userService.createClient(newClient);
     }
 
-    @PatchMapping("/users/{userId}")
+    @PostMapping("/admin/employees")
+    @ResponseStatus(HttpStatus.CREATED)
+    public InfoEmployeeDto adminCreateEmployee(@RequestBody final NewEmployeeDto newEmployee) {
+        return userService.createEmployee(newEmployee);
+    }
+
+    @PatchMapping("/clients/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public InfoClientDto patch(@PathVariable Long userId, @RequestBody UpdateUserDto updateUser) {
-        log.info("API service (UserController): Patch user={} by ID={}", updateUser, userId);
-        return userService.update(userId, updateUser);
+    public InfoClientDto privatePatchClient(
+            @PathVariable final Long clientId,
+            @RequestBody final UpdateClientDto updateClient) {
+        return userService.updateClient(clientId, updateClient);
     }
 
-    @DeleteMapping("/users/{userId}")
+    @PatchMapping("/admin/employees/{employeeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public InfoEmployeeDto adminPatchEmployee(
+            @PathVariable final Long employeeId,
+            @RequestBody final UpdateEmployeeDto updateEmployee) {
+        return userService.updateEmployee(employeeId, updateEmployee);
+    }
+
+    @DeleteMapping("/clients/{clientId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long userId) {
-        log.info("API service (UserController): Delete by ID={}", userId);
-        userService.delete(userId);
+    public void privateDelete(@PathVariable final Long clientId) {
+        userService.delete(clientId);
     }
 }

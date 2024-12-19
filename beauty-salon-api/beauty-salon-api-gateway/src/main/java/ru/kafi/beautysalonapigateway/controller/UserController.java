@@ -5,65 +5,90 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
-import ru.kafi.beautysalonapicommon.dto.user.UpdateUserDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.UpdateClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.NewEmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.UpdateEmployeeDto;
 import ru.kafi.beautysalonapigateway.annotation.PositiveList;
-import ru.kafi.beautysalonapigateway.client.UserClient;
+import ru.kafi.beautysalonapigateway.client.Client;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class UserController {
-    private final UserClient userClient;
+    private final Client userClient;
 
-    @GetMapping("api/admin/users/{userId}")
+    @GetMapping("/api/admin/clients/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> get(@Positive @PathVariable Long userId, HttpServletRequest request) {
-        log.info("API gateway (UserController): Get user with param ids={}", userId);
+    public ResponseEntity<?> adminGetClient(
+            @Positive @PathVariable final Long clientId,
+            final HttpServletRequest request) {
         return userClient.get(request);
     }
 
-    @GetMapping("api/admin/users")
+    @GetMapping("/api/clients/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public Page<?> getAll(
-            @PositiveList @RequestParam(required = false) List<Long> positionIds,
-            @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
-            @Positive @RequestParam(required = false, defaultValue = "10") Integer size,
+    public ResponseEntity<?> privateGetClient(
+            @Positive @PathVariable final Long clientId,
+            final HttpServletRequest request) {
+        return userClient.get(request);
+    }
+
+    @GetMapping("/api/admin/employees")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<?> adminGetEmployeesPage(
+            @PositiveList @RequestParam(required = false) final List<Long> positionIds,
+            @PositiveOrZero @RequestParam(defaultValue = "0") final Integer from,
+            @Positive @RequestParam(defaultValue = "10") final Integer size,
             HttpServletRequest request
     ) {
-        log.info("API gateway (UserController): Get user with param from={}, size={}", from, size);
-        return userClient.getAll(request);
+        return userClient.getPage(request);
     }
 
-    @PostMapping("api/users")
+    @PostMapping("/api/clients")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@Valid @RequestBody NewUserDto newUser, HttpServletRequest request) {
-        log.info("API gateway (UserController): Create user {}", newUser);
-        return userClient.create(request, newUser);
+    public ResponseEntity<?> publicCreateClient(
+            @Valid @RequestBody final NewClientDto newClient,
+            final HttpServletRequest request) {
+        return userClient.create(request, newClient);
     }
 
-    @PatchMapping("api/users/{userId}")
+    @PostMapping("/api/admin/employees")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> adminCreateEmployee(
+            @Valid @RequestBody final NewEmployeeDto newEmployee,
+            final HttpServletRequest request) {
+        return userClient.create(request, newEmployee);
+    }
+
+    @PatchMapping("/api/clients/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> patch(
-            @Positive @PathVariable Long userId,
-            @Valid @RequestBody UpdateUserDto updateUser,
-            HttpServletRequest request) {
-        log.info("API gateway (UserController): Patch user={} by ID={}", updateUser, userId);
-        return userClient.update(request, updateUser);
+    public ResponseEntity<?> privatePatchClient(
+            @Positive @PathVariable final Long clientId,
+            @Valid @RequestBody final UpdateClientDto updateClient,
+            final HttpServletRequest request) {
+        return userClient.update(request, updateClient);
     }
 
-    @DeleteMapping("api/users/{userId}")
+    @PatchMapping("/admin/employees/{employeeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> adminPatchEmployee(
+            @Positive @PathVariable final Long employeeId,
+            @Valid @RequestBody final UpdateEmployeeDto updateEmployee,
+            final HttpServletRequest request) {
+        return userClient.update(request, updateEmployee);
+    }
+
+    @DeleteMapping("/api/clients/{clientId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> delete(@Positive @PathVariable Long userId,
-                       HttpServletRequest request) {
-        log.info("API gateway (UserController): Delete by ID={}", userId);
+    public ResponseEntity<?> privateDelete(
+            @Positive @PathVariable final Long clientId,
+            final HttpServletRequest request) {
         return userClient.delete(request);
     }
 }

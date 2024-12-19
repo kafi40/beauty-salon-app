@@ -1,4 +1,4 @@
-package ru.kafi.beautysalonapicommon.dto.user;
+package ru.kafi.beautysalonapicommon.dto.position;
 
 import lombok.Data;
 

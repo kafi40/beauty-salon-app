@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS users(
     birthday DATE,
     telegram_id BIGINT UNIQUE,
     position_id BIGINT,
+    avatar_id BIGINT,
+    role VARCHAR(32),
     PRIMARY KEY (id)
 );
 
@@ -18,3 +20,13 @@ CREATE TABLE IF NOT EXISTS positions(
     max_salary DOUBLE PRECISION NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS images(
+    id SERIAL NOT NULL UNIQUE,
+    path VARCHAR(512) NOT NULL,
+    title VARCHAR(64) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE users ADD CONSTRAINT "users_position_id" FOREIGN KEY (position_id) REFERENCES positions(id);
+ALTER TABLE users ADD CONSTRAINT "users_avatar_id" FOREIGN KEY (avatar_id) REFERENCES images(id);

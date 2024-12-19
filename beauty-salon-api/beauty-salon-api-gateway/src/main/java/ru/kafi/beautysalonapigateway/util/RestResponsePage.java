@@ -1,4 +1,4 @@
-package ru.kafi.beautysalonapigateway.client;
+package ru.kafi.beautysalonapigateway.util;
 
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

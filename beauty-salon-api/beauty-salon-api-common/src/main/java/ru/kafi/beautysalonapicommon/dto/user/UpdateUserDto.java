@@ -6,15 +6,15 @@ import lombok.Data;
 import ru.kafi.beautysalonapicommon.enums.Gender;
 
 @Data
-public class UpdateUserDto {
+public abstract class UpdateUserDto {
     @Size(min = 1, max = 32)
-    private String firstName;
+    protected String firstName;
     @Size(min = 1, max = 32)
-    private String lastName;
+    protected String lastName;
     @Size(min = 1, max = 32)
-    private String middleName;
+    protected String middleName;
     @Email
-    private String email;
-    private Gender gender;
-    private String birthday;
+    protected String email;
+    protected Gender gender;
+    protected String birthday;
 }

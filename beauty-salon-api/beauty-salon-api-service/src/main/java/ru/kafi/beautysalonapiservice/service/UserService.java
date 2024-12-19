@@ -2,18 +2,27 @@ package ru.kafi.beautysalonapiservice.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import ru.kafi.beautysalonapicommon.dto.user.*;
+import ru.kafi.beautysalonapicommon.dto.user.client.InfoClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.UpdateClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.NewEmployeeDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.UpdateEmployeeDto;
 
 import java.util.List;
 
 public interface UserService {
-    FullInfoUserDto get(Long userId);
+    InfoClientDto getClient(Long clientId);
 
-    Page<InfoUserDto> getAll(List<Long> positionIds, PageRequest page);
+    Page<InfoEmployeeDto> getEmployeesPage(List<Long> positionIds, PageRequest page);
 
-    InfoClientDto create(NewUserDto newUser);
+    InfoClientDto createClient(NewClientDto newClient);
 
-    InfoClientDto update(Long userId, UpdateUserDto updateUser);
+    InfoEmployeeDto createEmployee(NewEmployeeDto newEmployee);
+
+    InfoClientDto updateClient(Long clientId, UpdateClientDto updateClient);
+
+    InfoEmployeeDto updateEmployee(Long employeeId, UpdateEmployeeDto updateEmployee);
 
     void delete(Long userId);
 }

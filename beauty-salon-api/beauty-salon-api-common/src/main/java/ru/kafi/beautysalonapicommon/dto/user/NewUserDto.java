@@ -2,21 +2,24 @@ package ru.kafi.beautysalonapicommon.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import ru.kafi.beautysalonapicommon.enums.Gender;
 
 @Data
-public class NewUserDto {
+public abstract class NewUserDto {
     @NotBlank
     @Size(min = 1, max = 32)
-    private String firstName;
+    protected String firstName;
     @Size(min = 1, max = 32)
-    private String lastName;
+    protected String lastName;
     @Size(min = 1, max = 32)
-    private String middleName;
+    protected String middleName;
     @Email
-    private String email;
-    private String gender;
-    private String birthday;
-    private Long telegramId;
+    protected String email;
+    protected Gender gender;
+    protected String birthday;
+    @Positive
+    protected Long telegramId;
 }
