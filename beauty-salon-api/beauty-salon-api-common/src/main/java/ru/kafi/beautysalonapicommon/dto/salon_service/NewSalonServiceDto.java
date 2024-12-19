@@ -7,14 +7,14 @@ import lombok.Data;
 
 @Data
 public class NewSalonServiceDto {
-    @NotBlank
-    @Size(min = 1, max = 64)
+    @NotBlank(message = "The name must be specified")
+    @Size(min = 1, max = 64, message = "The number of characters allowed is from 1 to 64")
     private String name;
-    @NotBlank
-    @Size(min = 20, max = 2000)
+    @NotBlank(message = "The description must be specified")
+    @Size(min = 20, max = 2000, message = "The number of characters allowed is from 1 to 2000")
     private String description;
-    @Positive
+    @Positive(message = "The price salary be greater than 0")
     private Double price;
-    @Positive
+    @Positive(message = "The duration salary be greater than 0")
     private Integer duration;
 }

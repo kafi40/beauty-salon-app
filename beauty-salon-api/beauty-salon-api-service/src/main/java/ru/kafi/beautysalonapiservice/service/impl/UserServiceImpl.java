@@ -123,13 +123,13 @@ public class UserServiceImpl implements UserService {
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
-                        "API service (UserController): User with ID=" + userId + " not found"));
+                        "API service (UserService): User with ID=" + userId + " not found"));
     }
 
     private Position getPosition(Long positionId) {
         return positionRepository.findById(positionId)
                 .orElseThrow(() -> new NotFoundException(
-                        "API service (UserController): Position with ID=" + positionId + " not found"));
+                        "API service (UserService): Position with ID=" + positionId + " not found"));
     }
 
     private Date toDate(String date) {

@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 public class UpdatePositionDto {
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 50, message = "The number of characters allowed is from 1 to 50")
     private String name;
-    @Positive
+    @Positive(message = "The min salary be greater than 0")
     private Double minSalary;
-    @Positive
+    @Positive(message = "The max salary be greater than 0")
     private Double maxSalary;
 }
