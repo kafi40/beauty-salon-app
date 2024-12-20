@@ -9,7 +9,7 @@ import ru.kafi.beautysalonapicommon.enums.Gender;
 
 @Data
 public abstract class NewUserDto {
-    @NotBlank(message = "The name must be specified")
+    @NotBlank(message = "The firstname must be specified")
     @Size(min = 1, max = 32, message = "The number of characters allowed is from 1 to 32")
     protected String firstName;
     @Size(min = 1, max = 32, message = "The number of characters allowed is from 1 to 32")

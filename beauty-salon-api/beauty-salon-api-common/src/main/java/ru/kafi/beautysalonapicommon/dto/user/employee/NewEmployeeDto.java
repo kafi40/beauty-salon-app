@@ -12,15 +12,15 @@ import ru.kafi.beautysalonapicommon.enums.Gender;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class NewEmployeeDto extends NewUserDto {
-    @NotBlank
-    @Size(min = 1, max = 32)
+    @NotBlank(message = "The lastName must be specified")
+    @Size(min = 1, max = 32, message = "The number of characters allowed is from 1 to 32")
     private String lastName;
-    @NotBlank
-    @Size(min = 1, max = 32)
+    @NotBlank(message = "The middleName must be specified")
+    @Size(min = 1, max = 32, message = "The number of characters allowed is from 1 to 32")
     private String middleName;
-    @NotBlank
+    @NotNull
     private Gender gender;
-    @NotBlank
+    @NotBlank(message = "The birthday must be specified")
     private String birthday;
     @NotNull
     @Positive

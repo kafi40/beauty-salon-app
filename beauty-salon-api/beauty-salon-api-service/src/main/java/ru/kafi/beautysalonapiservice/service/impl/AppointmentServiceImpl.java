@@ -10,12 +10,13 @@ import ru.kafi.beautysalonapicommon.util.Util;
 import ru.kafi.beautysalonapiservice.exception.NotFoundException;
 import ru.kafi.beautysalonapiservice.repository.AppointmentRepository;
 import ru.kafi.beautysalonapiservice.repository.SalonServiceRepository;
+import ru.kafi.beautysalonapiservice.repository.UserRepository;
 import ru.kafi.beautysalonapiservice.service.AppointmentService;
 import ru.kafi.beautysalonapiservice.service.entity.Appointment;
 import ru.kafi.beautysalonapiservice.service.entity.SalonService;
+import ru.kafi.beautysalonapiservice.service.entity.User;
 import ru.kafi.beautysalonapiservice.service.mapper.AppointmentMapper;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import java.util.List;
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final SalonServiceRepository salonServiceRepository;
+    private final UserRepository userRepository;
     private final AppointmentMapper appointmentMapper;
 
     @Override
@@ -40,9 +42,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public InfoAppointmentDto create(NewAppointmentDto newAppointment) {
-        SalonService salonService = salonServiceRepository.findById(newAppointment.getSalonServiceId())
-                .orElseThrow(() -> new NotFoundException(
-                        "API service (SalonServiceService): Service with ID=" + newAppointment.getSalonServiceId() + " not found"));
+        SalonService salonService = getSalonService(newAppointment.getSalonServiceId());
         LocalDateTime start = Util.toLocalDateTime(newAppointment.getRegisteredOn());
         LocalDateTime end = Util.toLocalDateTime(newAppointment.getRegisteredOn()).plusMinutes(salonService.getDuration());
         List<Appointment> appointments = appointmentRepository.findFreeSlot(newAppointment.getEmployeeId(), start, end);
@@ -66,5 +66,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new NotFoundException(
                         "API service (AppointmentService): Appointment with ID=" + appointmentId + " not found"));
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(
+                        "API service (AppointmentService): User with ID=" + userId + " not found"));
+    }
+
+    private SalonService getSalonService(Long salonServiceId) {
+        return salonServiceRepository.findById(salonServiceId)
+                .orElseThrow(() -> new NotFoundException(
+                        "API service (SalonServiceService): Service with ID=" + salonServiceId + " not found"));
     }
 }
