@@ -1,17 +1,23 @@
 package ru.kafi.beautysalonbothandler.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbotcommon.util.Constants;
+import ru.kafi.beautysalonbotcommon.util.Menu;
 import ru.kafi.beautysalonbotcommon.util.UserState;
+import ru.kafi.beautysalonbothandler.client.Client;
 import ru.kafi.beautysalonbothandler.factory.KeyboardFactory;
 import ru.kafi.beautysalonbothandler.sender.CustomSender;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -19,27 +25,38 @@ public class CallbackQueryHandler {
 
     private final UserCache userCache;
     private final CustomSender sender;
+    private final Client client;
 
     public BotApiMethod<?> processCallbackQuery(CallbackQuery callbackQuery, StateDto state) {
 
-        switch (state.getData()) {
-            case "register" -> {
+        switch (Menu.valueOf(state.getData())) {
+            case Menu.REGISTER -> {
                 return processRegistration(callbackQuery, state);
             }
-            case "info" -> {
+            case Menu.INFO -> {
                 return processInfo(state);
             }
-            case "personal-account" -> {
+            case Menu.ACCOUNT -> {
                 return processPersonalAccount(state);
             }
-            case "main-menu" -> {
+            case Menu.BACK -> {
                 return processMainMenu(state);
             }
-            case null, default -> {
+            case Menu.MASTERS -> {
+                return processMasters(state);
+            }
+            default -> {
                 return null;
             }
         }
 
+    }
+
+    public BotApiMethod<?> processMasters(StateDto stateDto) {
+        Page<InfoEmployeeDto> mastersPage = client.getAll("/api/admin/employees");
+        List<InfoEmployeeDto> masters = mastersPage.getContent();
+
+        return sender.sendMessage(masters, stateDto.getChatId());
     }
 
     public BotApiMethod<?> processInfo(StateDto stateDto) {

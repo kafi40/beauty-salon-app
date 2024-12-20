@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
+import ru.kafi.beautysalonapigateway.util.RestResponsePage;
 import ru.kafi.beautysalonbothandler.config.ClientConfig;
 import ru.kafi.beautysalonbothandler.client.Client;
 
@@ -35,12 +38,29 @@ public class TgRestClient implements Client {
     }
 
     @Override
-    public Page<?> getAll(String path) {
-        return null;
+    public Page<InfoEmployeeDto> getAll(String path) {
+        URI uri = UriComponentsBuilder
+                .fromUriString(baseUrl)
+                .path(path)
+                .build()
+                .toUri();
+        try {
+            ParameterizedTypeReference<RestResponsePage<InfoEmployeeDto>> responseType = new ParameterizedTypeReference<>() {
+            };
+            ResponseEntity<RestResponsePage<InfoEmployeeDto>> responseEntity = client.get()
+                    .uri(uri)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(authHeader, "test")
+                    .retrieve()
+                    .toEntity(responseType);
+            return responseEntity.getBody();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
-    public ResponseEntity<?> post(String path, Object body) {
+    public ResponseEntity<?> post(String path, NewClientDto body) {
         URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(path)
