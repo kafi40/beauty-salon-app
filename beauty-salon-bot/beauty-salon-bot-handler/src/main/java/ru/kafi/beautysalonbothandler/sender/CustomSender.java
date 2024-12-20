@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import ru.kafi.beautysalonapicommon.dto.salon_service.InfoSalonServiceDto;
 import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
 
 import java.util.List;
@@ -39,6 +40,20 @@ public class CustomSender {
         }
 
 
+        msg.setText(builder.toString());
+        msg.setChatId(chatId);
+        return msg;
+    }
+    public BotApiMethod<?> sendMessage(long chatId, List<InfoSalonServiceDto> services) {
+        StringBuilder builder = new StringBuilder();
+        SendMessage msg = new SendMessage();
+        builder.append("Прайс-лит оказываемых нашим салоном услуг: \n");
+        for(int i = 0; i < services.size();i++) {
+            InfoSalonServiceDto service = services.get(i);
+            builder.append(i).append(". ").append(service.getName()).append(": ")
+                    .append(service.getPrice()).append(", длительность сессии: ")
+                    .append(service.getDuration()).append(" м.\n");
+        }
         msg.setText(builder.toString());
         msg.setChatId(chatId);
         return msg;

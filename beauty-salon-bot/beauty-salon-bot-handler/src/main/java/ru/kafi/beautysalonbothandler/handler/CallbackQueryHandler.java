@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
+import ru.kafi.beautysalonapicommon.dto.salon_service.InfoSalonServiceDto;
 import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
 import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
@@ -25,7 +26,8 @@ public class CallbackQueryHandler {
 
     private final UserCache userCache;
     private final CustomSender sender;
-    private final Client client;
+    private final Client<InfoEmployeeDto> userClient;
+    private final Client<InfoSalonServiceDto> serviceClient;
 
     public BotApiMethod<?> processCallbackQuery(CallbackQuery callbackQuery, StateDto state) {
 
@@ -45,6 +47,9 @@ public class CallbackQueryHandler {
             case Menu.MASTERS -> {
                 return processMasters(state);
             }
+            case Menu.PRICE_LIST -> {
+                return processPriceList(state);
+            }
             default -> {
                 return null;
             }
@@ -52,18 +57,24 @@ public class CallbackQueryHandler {
 
     }
 
-    public BotApiMethod<?> processMasters(StateDto stateDto) {
-        Page<InfoEmployeeDto> mastersPage = client.getAll("/api/admin/employees");
+    private BotApiMethod<?> processPriceList(StateDto stateDto) {
+        List<InfoSalonServiceDto> serviceList = serviceClient.getAll("/services");
+
+        return sender.sendMessage(stateDto.getChatId(), serviceList);
+    }
+
+    private BotApiMethod<?> processMasters(StateDto stateDto) {
+        Page<InfoEmployeeDto> mastersPage = userClient.getPage("/api/admin/employees");
         List<InfoEmployeeDto> masters = mastersPage.getContent();
 
         return sender.sendMessage(masters, stateDto.getChatId());
     }
 
-    public BotApiMethod<?> processInfo(StateDto stateDto) {
+    private BotApiMethod<?> processInfo(StateDto stateDto) {
         return sender.sendMessage(Constants.INFO_TEXT, stateDto.getChatId());
     }
 
-    public BotApiMethod<?> processRegistration(CallbackQuery callbackQuery, StateDto state) {
+    private BotApiMethod<?> processRegistration(CallbackQuery callbackQuery, StateDto state) {
         if (userCache.isRegistered(callbackQuery.getFrom().getId())) {
             return sender.sendMessage("Вы уже зарегистрированы", state.getChatId());
         }
@@ -82,13 +93,13 @@ public class CallbackQueryHandler {
         return sender.sendMessage("Пожалуйста введите свой email", state.getChatId());
     }
 
-    public BotApiMethod<?> processPersonalAccount(StateDto stateDto) {
+    private BotApiMethod<?> processPersonalAccount(StateDto stateDto) {
         stateDto.setState(UserState.PERSONAL_ACCOUNT);
         return sender.sendMessage("Личный кабинет", stateDto.getChatId(),
                 KeyboardFactory.getPersonalAccountKeyBoard());
     }
 
-    public BotApiMethod<?> processMainMenu(StateDto stateDto) {
+    private BotApiMethod<?> processMainMenu(StateDto stateDto) {
         stateDto.setState(UserState.MAIN_MENU);
         return sender.sendMessage("Добро пожаловать в мини-приложение нашего салона красоты",
                 stateDto.getChatId(),

@@ -9,15 +9,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
-import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
 import ru.kafi.beautysalonapigateway.util.RestResponsePage;
 import ru.kafi.beautysalonbothandler.config.ClientConfig;
 import ru.kafi.beautysalonbothandler.client.Client;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 
 @Component
-public class TgRestClient implements Client {
+public class TgRestClient<T> implements Client<T> {
 
     private final RestClient client;
     private final String baseUrl;
@@ -53,16 +54,16 @@ public class TgRestClient implements Client {
     }
 
     @Override
-    public Page<InfoEmployeeDto> getAll(String path) {
+    public Page<T> getPage(String path) {
         URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(path)
                 .build()
                 .toUri();
         try {
-            ParameterizedTypeReference<RestResponsePage<InfoEmployeeDto>> responseType = new ParameterizedTypeReference<>() {
+            ParameterizedTypeReference<RestResponsePage<T>> responseType = new ParameterizedTypeReference<>() {
             };
-            ResponseEntity<RestResponsePage<InfoEmployeeDto>> responseEntity = client.get()
+            ResponseEntity<RestResponsePage<T>> responseEntity = client.get()
                     .uri(uri)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(authHeader, "test")
@@ -73,6 +74,29 @@ public class TgRestClient implements Client {
             return null;
         }
     }
+
+    @Override
+    public List<T> getAll(String path) {
+        URI uri = UriComponentsBuilder
+                .fromUriString(baseUrl)
+                .path(path)
+                .build()
+                .toUri();
+        try {
+            ParameterizedTypeReference<List<T>> responseType = new ParameterizedTypeReference<>() {
+            };
+            return client.get()
+                    .uri(uri)
+                    .header(authHeader, "test")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .toEntity(responseType)
+                    .getBody();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
 
     @Override
     public ResponseEntity<?> post(String path, NewClientDto body) {

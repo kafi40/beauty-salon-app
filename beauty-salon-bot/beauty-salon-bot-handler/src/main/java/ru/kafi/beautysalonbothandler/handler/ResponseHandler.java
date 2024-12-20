@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import ru.kafi.beautysalonapicommon.dto.user.client.InfoClientDto;
 import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
@@ -17,7 +18,7 @@ import ru.kafi.beautysalonbothandler.sender.CustomSender;
 @Controller
 @RequiredArgsConstructor
 public class ResponseHandler {
-    private final Client client;
+    private final Client<InfoClientDto> client;
     private final UserCache userCache;
     private final ErrorHandler errorHandler;
     private final CustomSender sender;
@@ -81,7 +82,7 @@ public class ResponseHandler {
                 KeyboardFactory.getMainMenuKeyBoard());
     }
 
-    public BotApiMethod<?> replyToStart(StateDto data) {
+    private BotApiMethod<?> replyToStart(StateDto data) {
         data.setState(UserState.MAIN_MENU);
         return sender.sendMessage("Добро пожаловать", data.getChatId());
     }
