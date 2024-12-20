@@ -33,8 +33,23 @@ public class TgRestClient implements Client {
 
     @Override
     public ResponseEntity<?> get(String path) {
+        URI uri = UriComponentsBuilder
+                .fromUriString(baseUrl)
+                .path(path)
+                .build()
+                .toUri();
+        try {
+            return client.get()
+                    .uri(uri)
+                    .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
+                    .header(authHeader, "test")
+                    .retrieve()
+                    .toEntity(new ParameterizedTypeReference<>() {
+                    });
+        } catch (Exception e) {
+            return error(e);
+        }
 
-        return null;
     }
 
     @Override
