@@ -135,4 +135,8 @@ public class UserServiceImpl implements UserService {
     private Date toDate(String date) {
         return Date.valueOf(LocalDate.parse(date));
     }
+
+    private Date toDate(LocalDate date) {
+        return Date.valueOf(date);
+    }
 }
