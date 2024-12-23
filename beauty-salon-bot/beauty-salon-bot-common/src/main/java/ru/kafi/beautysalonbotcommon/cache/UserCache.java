@@ -2,7 +2,8 @@ package ru.kafi.beautysalonbotcommon.cache;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 
 import java.util.HashMap;
@@ -13,15 +14,16 @@ import java.util.Set;
 @Data
 @Component
 public class UserCache {
-    private final Map<Long, NewUserDto> newUserCache = new HashMap<>();
+    private final Map<Long, NewClientDto> newUserCache = new HashMap<>();
     private final Map<Long, StateDto> statesCache = new HashMap<>();
     private final Set<Long> registeredUsers = new HashSet<>();
+    private final Map<Long, InfoEmployeeDto> employeeCache = new HashMap<>();
 
-    public void addNewUser(long chatId, NewUserDto newUserDto) {
+    public void addNewUser(long chatId, NewClientDto newUserDto) {
         newUserCache.put(chatId, newUserDto);
     }
 
-    public NewUserDto getNewUser(long chatId) {
+    public NewClientDto getNewUser(long chatId) {
         return newUserCache.get(chatId);
     }
 
@@ -39,6 +41,14 @@ public class UserCache {
 
     public StateDto getState(long chatId) {
         return statesCache.get(chatId);
+    }
+
+    public InfoEmployeeDto getEmployee(long userId) {
+        return employeeCache.get(userId);
+    }
+
+    public void addNewEmployee(InfoEmployeeDto infoEmployeeDto) {
+        employeeCache.put(infoEmployeeDto.getId(), infoEmployeeDto);
     }
 
     public void clearUserCache(long chatId) {

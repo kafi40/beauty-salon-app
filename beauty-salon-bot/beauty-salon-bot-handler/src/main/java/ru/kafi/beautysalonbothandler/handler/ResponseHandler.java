@@ -5,11 +5,12 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.InfoClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
 import ru.kafi.beautysalonbotcommon.cache.UserCache;
 import ru.kafi.beautysalonbotcommon.dto.StateDto;
 import ru.kafi.beautysalonbotcommon.util.UserState;
-import ru.kafi.beautysalonbothandler.client.UserTgClient;
+import ru.kafi.beautysalonbothandler.client.Client;
 import ru.kafi.beautysalonbothandler.factory.KeyboardFactory;
 import ru.kafi.beautysalonbothandler.sender.CustomSender;
 
@@ -17,12 +18,12 @@ import ru.kafi.beautysalonbothandler.sender.CustomSender;
 @Controller
 @RequiredArgsConstructor
 public class ResponseHandler {
-    private final UserTgClient client;
+    private final Client<InfoClientDto> client;
     private final UserCache userCache;
     private final ErrorHandler errorHandler;
     private final CustomSender sender;
 
-    public BotApiMethod<?> handle(StateDto data) {
+    public BotApiMethod<?> handle(final StateDto data) {
         long chatId = data.getChatId();
         String text = data.getMessageText();
 
@@ -54,10 +55,10 @@ public class ResponseHandler {
         }
     }
 
-    private BotApiMethod<?> replyToEmail(StateDto data) {
-        NewUserDto userDto = userCache.getNewUser(data.getChatId());
+    private BotApiMethod<?> replyToEmail(final StateDto data) {
+        NewClientDto userDto = userCache.getNewUser(data.getChatId());
         userDto.setEmail(data.getMessageText());
-        ResponseEntity<?> response = client.post("api/users", userDto);
+        ResponseEntity<?> response = client.post("api/clients", userDto);
 
         if (response.getStatusCode() != HttpStatusCode.valueOf(201)) {
             return errorHandler.handle(data, response);
@@ -74,14 +75,14 @@ public class ResponseHandler {
         return sender.sendMessage(messageText, data.getChatId());
     }
 
-    private BotApiMethod<?> replyToMainMenu(StateDto data) {
+    private BotApiMethod<?> replyToMainMenu(final StateDto data) {
         data.setState(UserState.MAIN_MENU);
         return sender.sendMessage("Добро пожаловать в мини-приложение нашего салона красоты",
                 data.getChatId(),
                 KeyboardFactory.getMainMenuKeyBoard());
     }
 
-    public BotApiMethod<?> replyToStart(StateDto data) {
+    private BotApiMethod<?> replyToStart(final StateDto data) {
         data.setState(UserState.MAIN_MENU);
         return sender.sendMessage("Добро пожаловать", data.getChatId());
     }

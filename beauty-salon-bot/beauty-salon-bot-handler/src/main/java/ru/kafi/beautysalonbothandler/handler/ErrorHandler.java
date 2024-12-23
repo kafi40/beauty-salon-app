@@ -16,7 +16,7 @@ public class ErrorHandler {
     private final CustomSender sender;
 
 
-    public BotApiMethod<?> handle(StateDto data, ResponseEntity<?> response) {
+    public BotApiMethod<?> handle(final StateDto data, final ResponseEntity<?> response) {
         HttpStatus code = HttpStatus.valueOf(response.getStatusCode().value());
         switch (code) {
             case HttpStatus.BAD_REQUEST -> {
@@ -28,7 +28,7 @@ public class ErrorHandler {
         }
     }
 
-    public BotApiMethod<?> handleBadRequest(StateDto data) {
+    public BotApiMethod<?> handleBadRequest(final StateDto data) {
         return sender.sendMessage("Произошла ошибка при обработке данных, убедитесь что данные корректны",
                 data.getChatId());
     }

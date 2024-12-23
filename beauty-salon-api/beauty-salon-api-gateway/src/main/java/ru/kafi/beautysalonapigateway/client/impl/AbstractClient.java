@@ -34,7 +34,7 @@ public abstract class AbstractClient {
     }
 
     protected ResponseEntity<?> get(HttpServletRequest request) {
-        URI uri  = UriComponentsBuilder
+        URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
                 .build()
@@ -45,7 +45,8 @@ public abstract class AbstractClient {
                     .headers(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
                     .header(authKeyHeaderName, request.getHeader(authKeyHeaderName))
                     .retrieve()
-                    .toEntity(new ParameterizedTypeReference<>(){});
+                    .toEntity(new ParameterizedTypeReference<>() {
+                    });
         } catch (Exception e) {
             return error(e);
         }
@@ -59,7 +60,8 @@ public abstract class AbstractClient {
                 .build()
                 .toUri();
         try {
-            ParameterizedTypeReference<RestResponsePage<?>> responseType = new ParameterizedTypeReference<>() {};
+            ParameterizedTypeReference<RestResponsePage<?>> responseType = new ParameterizedTypeReference<>() {
+            };
             ResponseEntity<RestResponsePage<?>> responseEntity = restClient.get()
                     .uri(uri)
                     .accept(MediaType.APPLICATION_JSON)
@@ -85,7 +87,8 @@ public abstract class AbstractClient {
                     .header(authKeyHeaderName, request.getHeader(authKeyHeaderName))
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
-                    .toEntity(new ParameterizedTypeReference<>(){});
+                    .toEntity(new ParameterizedTypeReference<>() {
+                    });
         } catch (Exception e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,7 +96,7 @@ public abstract class AbstractClient {
     }
 
     protected <T> ResponseEntity<?> create(HttpServletRequest request, T body) {
-        URI uri  = UriComponentsBuilder
+        URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
                 .build()
@@ -113,7 +116,7 @@ public abstract class AbstractClient {
     }
 
     protected <T> ResponseEntity<?> update(HttpServletRequest request, T body) {
-        URI uri  = UriComponentsBuilder
+        URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
                 .build()
@@ -133,7 +136,7 @@ public abstract class AbstractClient {
     }
 
     protected ResponseEntity<?> delete(HttpServletRequest request) {
-        URI uri  = UriComponentsBuilder
+        URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(subPath(request.getRequestURI()))
                 .build()
