@@ -44,11 +44,12 @@ public class CustomSender {
         msg.setChatId(chatId);
         return msg;
     }
+
     public BotApiMethod<?> sendMessage(long chatId, List<InfoSalonServiceDto> services) {
         StringBuilder builder = new StringBuilder();
         SendMessage msg = new SendMessage();
         builder.append("Прайс-лит оказываемых нашим салоном услуг: \n");
-        for(int i = 0; i < services.size();i++) {
+        for (int i = 0; i < services.size(); i++) {
             InfoSalonServiceDto service = services.get(i);
             builder.append(i).append(". ").append(service.getName()).append(": ")
                     .append(service.getPrice()).append(", длительность сессии: ")
