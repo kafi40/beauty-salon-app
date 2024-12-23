@@ -16,14 +16,14 @@ import java.util.List;
 @Slf4j
 public class CustomSender {
 
-    public BotApiMethod<?> sendMessage(String message, long chatId) {
+    public BotApiMethod<?> sendMessage(final String message, final long chatId) {
         SendMessage msg = new SendMessage();
         msg.setText(message);
         msg.setChatId(chatId);
         return msg;
     }
 
-    public BotApiMethod<?> sendMessage(String message, long chatId, ReplyKeyboard keyboard) {
+    public BotApiMethod<?> sendMessage(final String message, final long chatId, final ReplyKeyboard keyboard) {
         SendMessage msg = new SendMessage();
         msg.setText(message);
         msg.setChatId(chatId);
@@ -31,7 +31,7 @@ public class CustomSender {
         return msg;
     }
 
-    public BotApiMethod<?> sendMessage(List<InfoEmployeeDto> masters, long chatId) {
+    public BotApiMethod<?> sendMessage(final List<InfoEmployeeDto> masters, long chatId) {
         StringBuilder builder = new StringBuilder();
         SendMessage msg = new SendMessage();
         builder.append("Список доступных мастеров: \n");
@@ -45,7 +45,7 @@ public class CustomSender {
         return msg;
     }
 
-    public BotApiMethod<?> sendMessage(long chatId, List<InfoSalonServiceDto> services) {
+    public BotApiMethod<?> sendMessage(final long chatId, final List<InfoSalonServiceDto> services) {
         StringBuilder builder = new StringBuilder();
         SendMessage msg = new SendMessage();
         builder.append("Прайс-лит оказываемых нашим салоном услуг: \n");

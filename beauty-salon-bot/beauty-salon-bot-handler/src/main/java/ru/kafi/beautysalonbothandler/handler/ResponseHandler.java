@@ -23,7 +23,7 @@ public class ResponseHandler {
     private final ErrorHandler errorHandler;
     private final CustomSender sender;
 
-    public BotApiMethod<?> handle(StateDto data) {
+    public BotApiMethod<?> handle(final StateDto data) {
         long chatId = data.getChatId();
         String text = data.getMessageText();
 
@@ -55,7 +55,7 @@ public class ResponseHandler {
         }
     }
 
-    private BotApiMethod<?> replyToEmail(StateDto data) {
+    private BotApiMethod<?> replyToEmail(final StateDto data) {
         NewClientDto userDto = userCache.getNewUser(data.getChatId());
         userDto.setEmail(data.getMessageText());
         ResponseEntity<?> response = client.post("api/clients", userDto);
@@ -75,14 +75,14 @@ public class ResponseHandler {
         return sender.sendMessage(messageText, data.getChatId());
     }
 
-    private BotApiMethod<?> replyToMainMenu(StateDto data) {
+    private BotApiMethod<?> replyToMainMenu(final StateDto data) {
         data.setState(UserState.MAIN_MENU);
         return sender.sendMessage("Добро пожаловать в мини-приложение нашего салона красоты",
                 data.getChatId(),
                 KeyboardFactory.getMainMenuKeyBoard());
     }
 
-    private BotApiMethod<?> replyToStart(StateDto data) {
+    private BotApiMethod<?> replyToStart(final StateDto data) {
         data.setState(UserState.MAIN_MENU);
         return sender.sendMessage("Добро пожаловать", data.getChatId());
     }

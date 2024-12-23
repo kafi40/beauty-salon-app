@@ -18,7 +18,7 @@ public class BeautySalonBot extends SpringWebhookBot {
     private TelegramFacade telegramFacade;
 
 
-    public BeautySalonBot(SetWebhook setWebhook, String token, TelegramFacade telegramFacade) {
+    public BeautySalonBot(final SetWebhook setWebhook, final String token, final TelegramFacade telegramFacade) {
         super(setWebhook, token);
         this.telegramFacade = telegramFacade;
     }

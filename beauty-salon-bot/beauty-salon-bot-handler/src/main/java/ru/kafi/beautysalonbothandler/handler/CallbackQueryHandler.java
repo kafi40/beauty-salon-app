@@ -29,7 +29,7 @@ public class CallbackQueryHandler {
     private final Client<InfoEmployeeDto> userClient;
     private final Client<InfoSalonServiceDto> serviceClient;
 
-    public BotApiMethod<?> processCallbackQuery(CallbackQuery callbackQuery, StateDto state) {
+    public BotApiMethod<?> processCallbackQuery(final CallbackQuery callbackQuery, final StateDto state) {
 
         switch (Menu.valueOf(state.getData())) {
             case Menu.REGISTER -> {
@@ -57,24 +57,24 @@ public class CallbackQueryHandler {
 
     }
 
-    private BotApiMethod<?> processPriceList(StateDto stateDto) {
+    private BotApiMethod<?> processPriceList(final StateDto stateDto) {
         List<InfoSalonServiceDto> serviceList = serviceClient.getAll("/services");
 
         return sender.sendMessage(stateDto.getChatId(), serviceList);
     }
 
-    private BotApiMethod<?> processMasters(StateDto stateDto) {
+    private BotApiMethod<?> processMasters(final StateDto stateDto) {
         Page<InfoEmployeeDto> mastersPage = userClient.getPage("/api/admin/employees");
         List<InfoEmployeeDto> masters = mastersPage.getContent();
 
         return sender.sendMessage(masters, stateDto.getChatId());
     }
 
-    private BotApiMethod<?> processInfo(StateDto stateDto) {
+    private BotApiMethod<?> processInfo(final StateDto stateDto) {
         return sender.sendMessage(Constants.INFO_TEXT, stateDto.getChatId());
     }
 
-    private BotApiMethod<?> processRegistration(CallbackQuery callbackQuery, StateDto state) {
+    private BotApiMethod<?> processRegistration(final CallbackQuery callbackQuery, final StateDto state) {
         if (userCache.isRegistered(callbackQuery.getFrom().getId())) {
             return sender.sendMessage("Вы уже зарегистрированы", state.getChatId());
         }
@@ -93,13 +93,13 @@ public class CallbackQueryHandler {
         return sender.sendMessage("Пожалуйста введите свой email", state.getChatId());
     }
 
-    private BotApiMethod<?> processPersonalAccount(StateDto stateDto) {
+    private BotApiMethod<?> processPersonalAccount(final StateDto stateDto) {
         stateDto.setState(UserState.PERSONAL_ACCOUNT);
         return sender.sendMessage("Личный кабинет", stateDto.getChatId(),
                 KeyboardFactory.getPersonalAccountKeyBoard());
     }
 
-    private BotApiMethod<?> processMainMenu(StateDto stateDto) {
+    private BotApiMethod<?> processMainMenu(final StateDto stateDto) {
         stateDto.setState(UserState.MAIN_MENU);
         return sender.sendMessage("Добро пожаловать в мини-приложение нашего салона красоты",
                 stateDto.getChatId(),
