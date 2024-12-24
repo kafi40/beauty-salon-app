@@ -23,7 +23,7 @@ public class AppointmentController {
 
     @GetMapping("/admin/appointments/")
     @ResponseStatus(HttpStatus.OK)
-    public List<InfoAppointmentDto> adminGetAll() {
+    public List<InfoAppointmentDto> adminGetList() {
         return appointmentService.getAll();
     }
 
@@ -43,7 +43,7 @@ public class AppointmentController {
 
     @DeleteMapping("/appointments/{appointmentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void privateUpdate(@PathVariable final Long appointmentId) {
+    public void privateDelete(@PathVariable final Long appointmentId) {
         appointmentService.delete(appointmentId);
     }
 }

@@ -1,10 +1,10 @@
 package ru.kafi.beautysalonapicommon.dto.appointment;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Data;
-import ru.kafi.beautysalonapicommon.enums.Status;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @Data
 public class NewAppointmentDto {
@@ -17,8 +17,7 @@ public class NewAppointmentDto {
     @NotNull(message = "The service ID cannot be null")
     @Positive(message = "The service ID must be greater than 0")
     private Long salonServiceId;
-    @NotBlank(message = "The date and time must be specified")
-    private String registeredOn;
-    @NotNull(message = "The status must be specified")
-    private Status status;
+    @Future(message = "The registeredOn should be in the future")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime registeredOn;
 }

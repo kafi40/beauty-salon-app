@@ -20,19 +20,19 @@ public class PositionController {
 
     @GetMapping("/api/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> get(@Positive @PathVariable final Long positionId, final HttpServletRequest request) {
+    public ResponseEntity<?> adminGet(@Positive @PathVariable final Long positionId, final HttpServletRequest request) {
         return positionClient.get(request);
     }
 
     @GetMapping("/api/admin/positions")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<?>> getAll(final HttpServletRequest request) {
+    public ResponseEntity<List<?>> adminGetAll(final HttpServletRequest request) {
         return positionClient.getList(request);
     }
 
     @PostMapping("/api/admin/positions")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(
+    public ResponseEntity<?> adminCreate(
             @Valid @RequestBody final NewPositionDto newPosition,
             final HttpServletRequest request) {
         return positionClient.create(request, newPosition);
@@ -40,7 +40,7 @@ public class PositionController {
 
     @PatchMapping("/api/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> update(
+    public ResponseEntity<?> adminUpdate(
             @Positive @PathVariable final Long positionId,
             @Valid @RequestBody final UpdatePositionDto updatePosition,
             HttpServletRequest request) {
@@ -49,7 +49,7 @@ public class PositionController {
 
     @DeleteMapping("/api/admin/positions/{positionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> delete(@Positive @PathVariable final Long positionId, final HttpServletRequest request) {
+    public ResponseEntity<?> adminDelete(@Positive @PathVariable final Long positionId, final HttpServletRequest request) {
         return positionClient.delete(request);
     }
 }

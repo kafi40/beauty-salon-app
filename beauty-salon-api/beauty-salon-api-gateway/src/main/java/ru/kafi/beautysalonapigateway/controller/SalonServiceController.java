@@ -20,19 +20,19 @@ public class SalonServiceController {
 
     @GetMapping("/api/services/{serviceId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getPublic(@Positive @PathVariable final Long serviceId, final HttpServletRequest request) {
+    public ResponseEntity<?> publicGet(@Positive @PathVariable final Long serviceId, final HttpServletRequest request) {
         return salonServiceClient.get(request);
     }
 
     @GetMapping("/api/services")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<?>> getListPublic(final HttpServletRequest request) {
+    public ResponseEntity<List<?>> publicGetList(final HttpServletRequest request) {
         return salonServiceClient.getList(request);
     }
 
     @PostMapping("/api/admin/services")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createAdmin(
+    public ResponseEntity<?> adminCreate(
             @Valid @RequestBody final NewSalonServiceDto newSalonService,
             final HttpServletRequest request) {
         return salonServiceClient.create(request, newSalonService);
@@ -40,7 +40,7 @@ public class SalonServiceController {
 
     @PatchMapping("/api/admin/services/{serviceId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> updateAdmin(
+    public ResponseEntity<?> adminUpdate(
             @Positive @PathVariable final Long serviceId,
             @Valid @RequestBody final UpdateSalonServiceDto updateSalonService,
             final HttpServletRequest request) {
@@ -49,7 +49,7 @@ public class SalonServiceController {
 
     @DeleteMapping("/api/admin/services/{serviceId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> deleteAdmin(
+    public ResponseEntity<?> adminDelete(
             @Positive @PathVariable final Long serviceId,
             final HttpServletRequest request) {
         return salonServiceClient.delete(request);

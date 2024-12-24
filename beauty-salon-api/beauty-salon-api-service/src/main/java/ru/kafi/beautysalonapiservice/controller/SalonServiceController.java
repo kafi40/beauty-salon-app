@@ -17,25 +17,25 @@ public class SalonServiceController {
 
     @GetMapping("/services/{serviceId}")
     @ResponseStatus(HttpStatus.OK)
-    public InfoSalonServiceDto getPublic(@PathVariable final Long serviceId) {
+    public InfoSalonServiceDto publicGet(@PathVariable final Long serviceId) {
         return salonServiceService.get(serviceId);
     }
 
     @GetMapping("/services")
     @ResponseStatus(HttpStatus.OK)
-    public List<InfoSalonServiceDto> getListPublic() {
+    public List<InfoSalonServiceDto> publicGetList() {
         return salonServiceService.getAll();
     }
 
     @PostMapping("/admin/services")
     @ResponseStatus(HttpStatus.CREATED)
-    public InfoSalonServiceDto createAdmin(@RequestBody final NewSalonServiceDto newSalonService) {
+    public InfoSalonServiceDto adminCreate(@RequestBody final NewSalonServiceDto newSalonService) {
         return salonServiceService.create(newSalonService);
     }
 
     @PatchMapping("/admin/services/{serviceId}")
     @ResponseStatus(HttpStatus.OK)
-    public InfoSalonServiceDto updateAdmin(
+    public InfoSalonServiceDto adminUpdate(
             @PathVariable final Long serviceId,
             @RequestBody final UpdateSalonServiceDto updateSalonService) {
         return salonServiceService.update(serviceId, updateSalonService);
@@ -43,7 +43,7 @@ public class SalonServiceController {
 
     @DeleteMapping("/admin/services/{serviceId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAdmin(@PathVariable final Long serviceId) {
+    public void adminDelete(@PathVariable final Long serviceId) {
         salonServiceService.delete(serviceId);
     }
 }

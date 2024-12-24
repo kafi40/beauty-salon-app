@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -152,11 +151,7 @@ public abstract class AbstractClient {
 
     private ResponseEntity<?> error(Exception e) {
         log.error("API gateway (Client): Failed to access the server: {}", e.getMessage());
-//        String findStr = "\"status\":";
-//        int fIndex = e.getMessage().indexOf(findStr) + findStr.length();
-//        int lIndex = fIndex + 3;
-//        String status = e.getMessage().substring(fIndex, lIndex);
-        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(Integer.parseInt("500")));
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(500));
     }
 
     private String subPath(String path) {

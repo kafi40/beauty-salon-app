@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import ru.kafi.beautysalonapicommon.dto.appointment.InfoAppointmentDto;
 import ru.kafi.beautysalonapicommon.dto.appointment.NewAppointmentDto;
 import ru.kafi.beautysalonapicommon.dto.appointment.UpdateAppointmentDto;
+import ru.kafi.beautysalonapicommon.enums.Status;
 import ru.kafi.beautysalonapicommon.util.Util;
+import ru.kafi.beautysalonapiservice.exception.MakeAppointmentException;
 import ru.kafi.beautysalonapiservice.exception.NotFoundException;
 import ru.kafi.beautysalonapiservice.repository.AppointmentRepository;
 import ru.kafi.beautysalonapiservice.repository.SalonServiceRepository;
@@ -43,13 +45,21 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public InfoAppointmentDto create(NewAppointmentDto newAppointment) {
         SalonService salonService = getSalonService(newAppointment.getSalonServiceId());
-        LocalDateTime start = Util.toLocalDateTime(newAppointment.getRegisteredOn());
-        LocalDateTime end = Util.toLocalDateTime(newAppointment.getRegisteredOn()).plusMinutes(salonService.getDuration());
+        LocalDateTime start = newAppointment.getRegisteredOn();
+        LocalDateTime end = newAppointment.getRegisteredOn().plusMinutes(salonService.getDuration());
         List<Appointment> appointments = appointmentRepository.findFreeSlot(newAppointment.getEmployeeId(), start, end);
-        if (!appointments.isEmpty())
-            throw new RuntimeException("Время занято");
+        if (!appointments.isEmpty()) {
+            throw new MakeAppointmentException("API service (AppointmentService): This time has already been booked");
+        }
+        User employee = getUser(newAppointment.getEmployeeId());
         Appointment appointment = appointmentMapper.toEntity(newAppointment);
-        return null;
+        User client = getUser(newAppointment.getClientId());
+        appointment.setClient(client);
+        appointment.setEmployee(employee);
+        appointment.setSalonService(salonService);
+        appointment.setStatus(Status.BOOKED);
+        appointment = appointmentRepository.save(appointment);
+        return appointmentMapper.toDto(appointment);
     }
 
     @Override
@@ -59,7 +69,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void delete(Long appointmentId) {
-
+        appointmentRepository.deleteById(appointmentId);
     }
 
     private Appointment getAppointment(Long appointmentId) {

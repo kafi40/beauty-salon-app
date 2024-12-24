@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
 import ru.kafi.beautysalonapicommon.dto.user.NewUserDto;
 import ru.kafi.beautysalonapicommon.enums.Gender;
 
