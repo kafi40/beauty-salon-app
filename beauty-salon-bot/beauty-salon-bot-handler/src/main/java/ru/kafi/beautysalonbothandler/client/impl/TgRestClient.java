@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.kafi.beautysalonapicommon.dto.salon_service.InfoSalonServiceDto;
 import ru.kafi.beautysalonapicommon.dto.user.client.NewClientDto;
+import ru.kafi.beautysalonapicommon.dto.user.employee.InfoEmployeeDto;
 import ru.kafi.beautysalonapigateway.util.RestResponsePage;
 import ru.kafi.beautysalonbothandler.config.ClientConfig;
 import ru.kafi.beautysalonbothandler.client.Client;
@@ -18,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class TgRestClient<T> implements Client<T> {
+public class TgRestClient implements Client {
 
     private final RestClient client;
     private final String baseUrl;
@@ -54,16 +56,16 @@ public class TgRestClient<T> implements Client<T> {
     }
 
     @Override
-    public Page<T> getPage(String path) {
+    public Page<InfoEmployeeDto> getPage(String path) {
         URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(path)
                 .build()
                 .toUri();
         try {
-            ParameterizedTypeReference<RestResponsePage<T>> responseType = new ParameterizedTypeReference<>() {
+            ParameterizedTypeReference<RestResponsePage<InfoEmployeeDto>> responseType = new ParameterizedTypeReference<>() {
             };
-            ResponseEntity<RestResponsePage<T>> responseEntity = client.get()
+            ResponseEntity<RestResponsePage<InfoEmployeeDto>> responseEntity = client.get()
                     .uri(uri)
                     .accept(MediaType.APPLICATION_JSON)
                     .header(authHeader, "test")
@@ -76,14 +78,14 @@ public class TgRestClient<T> implements Client<T> {
     }
 
     @Override
-    public List<T> getAll(String path) {
+    public List<InfoSalonServiceDto> getAll(String path) {
         URI uri = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path(path)
                 .build()
                 .toUri();
         try {
-            ParameterizedTypeReference<List<T>> responseType = new ParameterizedTypeReference<>() {
+            ParameterizedTypeReference<List<InfoSalonServiceDto>> responseType = new ParameterizedTypeReference<>() {
             };
             return client.get()
                     .uri(uri)
