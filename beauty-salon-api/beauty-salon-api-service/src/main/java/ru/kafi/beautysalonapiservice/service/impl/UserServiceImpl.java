@@ -18,6 +18,7 @@ import ru.kafi.beautysalonapiservice.exception.ValueAlreadyUsedException;
 import ru.kafi.beautysalonapiservice.exception.NotFoundException;
 import ru.kafi.beautysalonapiservice.repository.PositionRepository;
 import ru.kafi.beautysalonapiservice.repository.UserRepository;
+import ru.kafi.beautysalonapiservice.service.ServiceOne;
 import ru.kafi.beautysalonapiservice.service.UserService;
 import ru.kafi.beautysalonapiservice.service.entity.Position;
 import ru.kafi.beautysalonapiservice.service.entity.QUser;
@@ -31,14 +32,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractService implements UserService {
     private final UserRepository userRepository;
     private final PositionRepository positionRepository;
     private final UserMapper userMapper;
 
     @Override
     public InfoClientDto getClient(Long clientId) {
-        User user = getUser(clientId);
+        User user = ServiceOne.getEntityById(clientId, userRepository);
         return userMapper.toClientDto(user);
     }
 

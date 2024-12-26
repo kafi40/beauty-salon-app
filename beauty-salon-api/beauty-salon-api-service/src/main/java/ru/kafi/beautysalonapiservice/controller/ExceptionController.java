@@ -16,37 +16,37 @@ import java.time.LocalDateTime;
 public class ExceptionController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiErrorDto notFoundException(final NotFoundException e) {
+    public void notFoundException(final NotFoundException e) {
         log.info("Not found exception - {}", e.getMessage(), e);
-        return new ApiErrorDto(
-                HttpStatus.NOT_FOUND.toString(),
-                "Not found error",
-                e.getMessage(),
-                LocalDateTime.now()
-        );
+//        return new ApiErrorDto(
+//                HttpStatus.NOT_FOUND.toString(),
+//                "Not found error",
+//                e.getMessage(),
+//                LocalDateTime.now()
+//        );
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiErrorDto handleUnexpected(final Exception e) {
-        log.warn("unexpected error");
-        return new ApiErrorDto(
-                HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-                "Not found error",
-                e.getMessage(),
-                LocalDateTime.now()
-        );
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrorDto valueAlreadyUsedException(final ValueAlreadyUsedException e) {
-        log.info("Value already used exception - {}", e.getMessage(), e);
-        return new ApiErrorDto(
-                HttpStatus.BAD_REQUEST.toString(),
-                "Not found error",
-                e.getMessage(),
-                LocalDateTime.now()
-        );
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ApiErrorDto handleUnexpected(final Exception e) {
+//        log.warn("unexpected error");
+//        return new ApiErrorDto(
+//                HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+//                "Not found error",
+//                e.getMessage(),
+//                LocalDateTime.now()
+//        );
+//    }
+//
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ApiErrorDto valueAlreadyUsedException(final ValueAlreadyUsedException e) {
+//        log.info("Value already used exception - {}", e.getMessage(), e);
+//        return new ApiErrorDto(
+//                HttpStatus.BAD_REQUEST.toString(),
+//                "Not found error",
+//                e.getMessage(),
+//                LocalDateTime.now()
+//        );
+//    }
 }

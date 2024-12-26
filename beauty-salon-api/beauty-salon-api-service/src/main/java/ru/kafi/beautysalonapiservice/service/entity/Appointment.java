@@ -27,6 +27,8 @@ public class Appointment {
     private SalonService salonService;
     @Column(name = "registered_on", nullable = false)
     private Timestamp registeredOn;
+    @Column(name = "registered_end", nullable = false)
+    private Timestamp registeredEnd;
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;

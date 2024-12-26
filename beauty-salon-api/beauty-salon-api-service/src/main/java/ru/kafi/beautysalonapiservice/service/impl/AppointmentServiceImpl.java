@@ -7,7 +7,6 @@ import ru.kafi.beautysalonapicommon.dto.appointment.InfoAppointmentDto;
 import ru.kafi.beautysalonapicommon.dto.appointment.NewAppointmentDto;
 import ru.kafi.beautysalonapicommon.dto.appointment.UpdateAppointmentDto;
 import ru.kafi.beautysalonapicommon.enums.Status;
-import ru.kafi.beautysalonapicommon.util.Util;
 import ru.kafi.beautysalonapiservice.exception.MakeAppointmentException;
 import ru.kafi.beautysalonapiservice.exception.NotFoundException;
 import ru.kafi.beautysalonapiservice.repository.AppointmentRepository;
@@ -25,7 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AppointmentServiceImpl implements AppointmentService {
+public class AppointmentServiceImpl extends AbstractService implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final SalonServiceRepository salonServiceRepository;
     private final UserRepository userRepository;
@@ -44,7 +43,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public InfoAppointmentDto create(NewAppointmentDto newAppointment) {
-        SalonService salonService = getSalonService(newAppointment.getSalonServiceId());
+        SalonService salonService = super.getEntityById(newAppointment.getSalonServiceId(), salonServiceRepository);
         LocalDateTime start = newAppointment.getRegisteredOn();
         LocalDateTime end = newAppointment.getRegisteredOn().plusMinutes(salonService.getDuration());
         List<Appointment> appointments = appointmentRepository.findFreeSlot(newAppointment.getEmployeeId(), start, end);
