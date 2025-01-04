@@ -26,8 +26,8 @@ public class CallbackQueryHandler {
 
     private final UserCache userCache;
     private final CustomSender sender;
-    private final Client<InfoEmployeeDto> userClient;
-    private final Client<InfoSalonServiceDto> serviceClient;
+    private final Client client;
+
 
     public BotApiMethod<?> processCallbackQuery(final CallbackQuery callbackQuery, final StateDto state) {
 
@@ -58,13 +58,13 @@ public class CallbackQueryHandler {
     }
 
     private BotApiMethod<?> processPriceList(final StateDto stateDto) {
-        List<InfoSalonServiceDto> serviceList = serviceClient.getAll("/services");
+        List<InfoSalonServiceDto> serviceList = client.getAll("/services");
 
         return sender.sendMessage(stateDto.getChatId(), serviceList);
     }
 
     private BotApiMethod<?> processMasters(final StateDto stateDto) {
-        Page<InfoEmployeeDto> mastersPage = userClient.getPage("/api/admin/employees");
+        Page<InfoEmployeeDto> mastersPage = client.getPage("/api/admin/employees");
         List<InfoEmployeeDto> masters = mastersPage.getContent();
 
         return sender.sendMessage(masters, stateDto.getChatId());
